@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Código QR</title>
+    <link rel="icon" href="icon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+
+<body>
+
+
+    <header>
+        <h1>Wanda's Generador de Código QR</h1> 
+        <img id="logo" src="logo.png" alt="logo hospital" title="Hospital Mercante">
+    </header>
+
+
+    <form>
+        <label for="nombre">URL:</label>
+        <input type="text" id="nombre" placeholder="Nombre">
+
+        
+            </select>
+
+
+        <button type="button" onclick="generarCodigoQR()">Generar Código QR</button>
+        <button type="reset">Limpiar Formulario</button>
+        <br><br>
+    
+
+        <div id="codigoQR"></div>
+
+    
+        <script>
+        function generarCodigoQR() {
+            var nombre = document.getElementById('nombre').value;
+            var datos = `${nombre}\n`;
+
+            var codigoQRDiv = document.getElementById('codigoQR');
+            codigoQRDiv.innerHTML = ''; // Limpiar el contenido anterior
+
+        
+            var qrcode = new QRCode(codigoQRDiv, {
+                text: datos,
+                width: 180,
+                height: 180,
+                colorDark : "#000000",
+	            colorLight : "#ffffff",
+	       
+            });
+        
+        }
+        </script>
+    
+    </form>
+
+</body>
+
+</html>

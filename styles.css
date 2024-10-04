@@ -1,0 +1,50 @@
+body {
+    font-family: Georgia;
+    margin: 20px;
+}
+h1{
+    text-align: center;
+    padding: 30px;
+    color: brown;
+    
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    float: center;
+    
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: royalblue;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    
+}
+
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#logo{
+    
+    width: 100px;
+   margin-right: 10%;
+    float: right;
+}
