@@ -3,112 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertidor de Imágenes, Código QR y Texto a Voz</title>
+    <title>Dashboard de Clima en Tiempo Real</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icon.ico">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            text-align: center;
-            margin: 0;
-            padding: 20px;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            margin: 0;
-        }
-
-        #logo {
-            width: 50px;
-            vertical-align: middle;
-        }
-
-        form, .voice-container, .image-converter {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0;
-            font-weight: bold;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 5px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        a {
-            display: block;
-            margin-top: 20px;
-            font-size: 18px;
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        #codigoQR {
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
     <header>
-        <h1>Convertidor de Imágenes, Generador de Código QR y Texto a Voz</h1>
+        <h1>El Rincón de Wanda</h1>
         <img id="logo" src="logo.png" alt="logo hospital" title="Hospital Mercante">
     </header>
+<div id="hora-container">
+    <div id="hora">--:--:--</div>
+</div>
 
-    <!-- Sección de conversión de imágenes -->
-    <div class="image-converter">
-        <h2>Convertidor de Imágenes</h2>
-        <label for="fileInput">Selecciona el archivo:</label>
-        <input type="file" id="fileInput" accept="image/*">
-        
-        <div>
-            <button id="convertToPng">Convertir a PNG</button>
-            <button id="convertToJpg">Convertir a JPG</button>
-            <button id="convertToWebp">Convertir a WEBP</button>
-            <button id="convertToGif">Convertir a GIF</button>
-        </div>
 
-        <canvas id="canvas" style="display:none;"></canvas>
-        <a id="downloadLink" style="display:none;">Descargar imagen convertida</a>
+<div id="dashboard">
+    <h1>Dashboard del Clima</h1>
+    <div id="ciudad">Ciudad: --</div>
+    <div id="clima">Temperatura: --°C</div>
+    <div id="condicion">Condición: --</div>
+    <div id="viento">Velocidad del viento: -- km/h</div>
+    <div id="humedad">Humedad: --%</div>
+    <div id="sensacion">Sensación térmica: --°C</div>
+    <div id="datos-curiosos">
+        <h3>Datos curiosos:</h3>
+        <p>Sabías que Argentina es el primer país en utilizar las huellas dactilares como método de identificación.</p>
     </div>
 
-    <!-- Generador de Código QR -->
+<div>
+
+</div>
+</div>
+
+ <!-- Sección de conversión de imágenes -->
+ <div class="image-converter">
+    <h2>Convertidor de Imágenes</h2>
+    <label for="fileInput">Selecciona el archivo:</label>
+    <input type="file" id="fileInput" accept="image/*">
+    
+    <div>
+        <button id="convertToPng">Convertir a PNG</button>
+        <button id="convertToJpg">Convertir a JPG</button>
+        <button id="convertToWebp">Convertir a WEBP</button>
+        <button id="convertToGif">Convertir a GIF</button>
+    </div>
+
+    <canvas id="canvas" style="display:none;"></canvas>
+    <a id="downloadLink" style="display:none;">Descargar imagen convertida</a>
+</div>
+
+ <!-- Generador de Código QR -->
     <form>
         <h2>Generador de Código QR</h2>
         <label for="nombre">URL para el Código QR:</label>
@@ -120,21 +65,83 @@
         <div id="codigoQR"></div>
     </form>
 
-    <!-- Convertidor de Texto a Voz -->
-    <div class="voice-container">
-        <h2>Convertidor de Texto a Voz</h2>
-        <textarea id="text-input" rows="10" cols="50" placeholder="Escribe el texto aquí..."></textarea><br>
+<!-- Convertidor de Texto a Voz -->
+<div class="voice-container">
+    <h2>Convertidor de Texto a Voz</h2>
+    <textarea id="text-input" rows="10" cols="50" placeholder="Escribe el texto aquí..."></textarea><br>
 
-        <label for="voice-select">Selecciona una voz:</label>
-        <select id="voice-select"></select><br>
+    <label for="voice-select">Selecciona una voz:</label>
+    <select id="voice-select"></select><br>
 
-        <button id="speak-btn">Hablar</button>
-        <button id="stop-btn">Detener</button>
-    </div>
+    <button id="speak-btn">Hablar</button>
+    <button id="stop-btn">Detener</button>
+</div>
 
-    <script>
-        // Código para el Generador de Código QR
-        function generarCodigoQR() {
+<!-- Accesos directos-->
+<div>
+     <div class="image-links">
+    <h2> Accesos directos </h2>
+    <a href="https://www.ejemplo1.com">
+      <img src="imagen1.jpg" alt="Descripción de Imagen 1">
+    </a>
+    <a href="https://www.ejemplo2.com">
+      <img src="imagen2.jpg" alt="Descripción de Imagen 2">
+    </a>
+    <a href="https://www.ejemplo3.com">
+      <img src="imagen3.jpg" alt="Descripción de Imagen 3">
+    </a>
+  </div>
+</div>
+
+<script>
+// API key de OpenWeatherMap
+const apiKey = '306d7aae049f78a184aec7e1656ad106';
+const ciudad = 'José C. Paz,Buenos Aires'; // Cambia la localidad según tu necesidad
+
+// Función para obtener y mostrar los datos del clima
+function obtenerClima() {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`)
+    .then(response => response.json())
+    .then(data => {
+        const nombreCiudad = data.name;
+        const temperatura = data.main.temp;
+        const condicion = data.weather[0].description;
+        const viento = data.wind.speed;
+        const humedad = data.main.humidity;
+        const sensacion = data.main.feels_like;
+
+        // Mostrar datos en el dashboard
+        document.getElementById('ciudad').textContent = `Ciudad: ${nombreCiudad}`;
+        document.getElementById('clima').textContent = `Temperatura: ${temperatura}°C`;
+        document.getElementById('condicion').textContent = `Condición: ${condicion.charAt(0).toUpperCase() + condicion.slice(1)}`;
+        document.getElementById('viento').textContent = `Velocidad del viento: ${viento} km/h`;
+        document.getElementById('humedad').textContent = `Humedad: ${humedad}%`;
+        document.getElementById('sensacion').textContent = `Sensación térmica: ${sensacion}°C`;
+    })
+    .catch(error => {
+        document.getElementById('clima').textContent = 'No se pudo obtener el clima.';
+        console.error('Error al obtener el clima:', error);
+    });
+}
+
+// Función para mostrar la hora actual
+function mostrarHora() {
+    const fecha = new Date();
+    const horas = fecha.getHours().toString().padStart(2, '0');
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+    const segundos = fecha.getSeconds().toString().padStart(2, '0');
+    document.getElementById('hora').textContent = `${horas}:${minutos}:${segundos}`;
+}
+
+// Actualiza la hora cada segundo
+setInterval(mostrarHora, 1000);
+
+// Obtiene el clima al cargar la página y luego cada 10 minutos
+obtenerClima();
+setInterval(obtenerClima, 600000); // 600000ms = 10 minutos
+
+ // Código para el Generador de Código QR
+ function generarCodigoQR() {
             var nombre = document.getElementById('nombre').value;
             var datos = `${nombre}\n`;
 
@@ -234,6 +241,8 @@
         document.getElementById('convertToGif').addEventListener('click', function() {
             convertAndDownload('image/gif');
         });
-    </script>
+
+</script>
+
 </body>
 </html>

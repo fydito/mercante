@@ -1,50 +1,196 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+/* General */
 body {
-    font-family: Georgia;
-    margin: 20px;
-}
-h1{
-    text-align: center;
-    padding: 30px;
-    color: brown;
-    
+    background: #f4f7f6;
+    color: #333;
+    font-size: 16px;
 }
 
-form {
-    max-width: 400px;
-    margin: 0 auto;
-    float: center;
-    
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: royalblue;
-}
-
-input,
-select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    
-}
-
-button {
-    padding: 10px;
-    background-color: #4CAF50;
+header {
+    background: #008080;
     color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Hora Container */
+#hora-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+#hora {
+    font-size: 3rem;
+    font-weight: bold;
+    background: #333;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+}
+
+/* Dashboard */
+#dashboard {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 800px;
+}
+
+#dashboard h1 {
+    color: #008080;
+    margin-bottom: 2rem;
+}
+
+#dashboard div {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+/* Datos Curiosos */
+#datos-curiosos {
+    background: #e7f7f7;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+/* Image Converter */
+.image-converter {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 800px;
+}
+
+.image-converter h2 {
+    color: #008080;
+    margin-bottom: 1rem;
+}
+
+.image-converter button {
+    background: #008080;
+    color: #fff;
     border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
     cursor: pointer;
+    margin-right: 0.5rem;
 }
 
-button:hover {
-    background-color: #45a049;
+.image-converter button:hover {
+    background: #006666;
 }
 
-#logo{
-    
-    width: 100px;
-   margin-right: 10%;
-    float: right;
+/* QR Code Generator */
+form {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 800px;
 }
+
+form h2 {
+    color: #008080;
+    margin-bottom: 1rem;
+}
+
+form button {
+    background: #008080;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+form button:hover {
+    background: #006666;
+}
+
+/* Voice Container */
+.voice-container {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 800px;
+}
+
+.voice-container h2 {
+    color: #008080;
+    margin-bottom: 1rem;
+}
+
+.voice-container button {
+    background: #008080;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.voice-container button:hover {
+    background: #006666;
+}
+
+
+.image-links   {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 800px;
+}
+
+.image-links  h2 {
+    color: #008080;
+    margin-bottom: 1rem;
+}
+
+.image-links   button {
+    background: #008080;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+}
+
+.image-links  button:hover {
+    background: #006666;
+}
+
+.image-links a {
+    display: inline-block;
+    margin: 10px; /* Ajusta el espacio entre imágenes */
+  }
+  
+  .image-links img {
+    width: 150px; /* Ajustá el tamaño de las imágenes */
+    height: auto;
+  }
+  
