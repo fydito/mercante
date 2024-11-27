@@ -155,8 +155,52 @@ form button:hover {
     background: #006666;
 }
 
+/* Estilos para el reproductor de audio */
+.audio-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    max-width: 800px;
+}
 
-.image-links   {
+.audio-controls h1 {
+    color: #008080;
+    margin-bottom: 2rem;
+}
+
+.audio-controls button {
+    background: #008080;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.5rem;
+    transition: background 0.3s;
+}
+
+.audio-controls button:hover {
+    background: #006666;
+}
+
+.audio-controls .button-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.audio-controls .button-group button {
+    flex: 1;
+}
+
+
+/* Image Converter */
+.link-shortener {
     background: #f9f9f9;
     padding: 2rem;
     border-radius: 10px;
@@ -165,12 +209,12 @@ form button:hover {
     max-width: 800px;
 }
 
-.image-links  h2 {
+.link-shortener h2 {
     color: #008080;
     margin-bottom: 1rem;
 }
 
-.image-links   button {
+.link-shortener button {
     background: #008080;
     color: #fff;
     border: none;
@@ -180,17 +224,6 @@ form button:hover {
     margin-right: 0.5rem;
 }
 
-.image-links  button:hover {
+.link-shortener button:hover {
     background: #006666;
 }
-
-.image-links a {
-    display: inline-block;
-    margin: 10px; /* Ajusta el espacio entre imágenes */
-  }
-  
-  .image-links img {
-    width: 150px; /* Ajustá el tamaño de las imágenes */
-    height: auto;
-  }
-  

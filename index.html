@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <h1>El Rincón de Wanda</h1>
+        <h1>Dashboard de Herramientas</h1>
         <img id="logo" src="logo.png" alt="logo hospital" title="Hospital Mercante">
     </header>
 <div id="hora-container">
@@ -28,7 +28,7 @@
     <div id="sensacion">Sensación térmica: --°C</div>
     <div id="datos-curiosos">
         <h3>Datos curiosos:</h3>
-        <p>Sabías que Argentina es el primer país en utilizar las huellas dactilares como método de identificación.</p>
+        <p>Sabías que el lugar más seco del mundo es el desierto de Atacama en Chile.</p>
     </div>
 
 <div>
@@ -52,6 +52,16 @@
     <canvas id="canvas" style="display:none;"></canvas>
     <a id="downloadLink" style="display:none;">Descargar imagen convertida</a>
 </div>
+
+<!-- Acortador de Links -->
+<div class="link-shortener">
+    <h2>Acortador de Links</h2>
+    <label for="linkInput">Introduce el enlace:</label>
+    <input type="url" id="linkInput" placeholder="https://example.com" required>
+    <button id="shortenBtn">Acortar Link</button>
+    <div id="shortenedLink" style="margin-top: 1rem;"></div>
+</div>
+
 
  <!-- Generador de Código QR -->
     <form>
@@ -77,23 +87,62 @@
     <button id="stop-btn">Detener</button>
 </div>
 
-<!-- Accesos directos-->
-<div>
-     <div class="image-links">
-    <h2> Accesos directos </h2>
-    <a href="https://1drv.ms/f/c/bc9f5f382b2f0f07/EgcPLys4X58ggLxtAAAAAAAB9KgbOOuQPybg-Eg7JZX9ig?e=aD9AkM">
-      <img src="nube.png" alt="Formulario de Personal">
-	  <h3> Formularios de Personal </h3>
-    </a>
-    <a href="https://www.ejemplo2.com">
-      <img src="imagen2.jpg" alt="Descripción de Imagen 2">
-    </a>
-    <a href="https://www.ejemplo3.com">
-      <img src="imagen3.jpg" alt="Descripción de Imagen 3">
-    </a>
-  </div>
+<div class="audio-controls">
+    <button id="rec-btn">Rec</button>
+    <button id="stop-rec-btn" disabled>Terminar Grabación</button>
+    <div class="button-group">
+        <button id="play-btn" disabled>Play</button>
+        <button id="pause-btn" disabled>Pausa</button>
+        <button id="stop-btn" disabled>Stop</button>
+    </div>
+    <button id="save-btn" disabled>Guardar</button>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.0/lame.min.js"></script>
 
+<script>
+    let recButton = document.getElementById('rec-btn');
+    let stopRecButton = document.getElementById('stop-rec-btn');
+    let playButton = document.getElementById('play-btn');
+    let pauseButton = document.getElementById('pause-btn');
+    let stopButton = document.getElementById('stop-btn');
+    let saveButton = document.getElementById('save-btn');
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioBlob;
+    let audioUrl;
+    let audio;
+    let recorder;
+
+    recButton.addEventListener('click', () => {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                let input = audioContext.createMediaStreamSource(stream);
+                recorder = new Recorder(input, { numChannels: 1 });
+                recorder.record();
+                recButton.disabled = true;
+                stopRecButton.disabled = false;
+                playButton.disabled = true;
+                pauseButton.disabled = true;
+                stopButton.disabled = true;
+                saveButton.disabled = true;
+            });
+    });
+
+    stopRecButton.addEventListener('click', () => {
+        recorder.stop();
+        recorder.exportWAV(blob => {
+            let reader = new FileReader();
+            reader.readAsArrayBuffer(blob);
+            reader.onloadend = () => {
+                let arrayBuffer = reader.result;
+                let mp3Encoder = new lamejs.Mp3Encoder(1, 44100, 128);
+                let samples = new Int16Array(arrayBuffer);
+                let mp3Data = [];
+                let[_{{{CITATION{{{_1{](https://github.com/la9una/web/tree/ba1073ae044ebb7b538a3b13f0f9598f7c410bb6/docs%2Fbootstrap%2Falignci.md)
+
+                </script>                
 <script>
 // API key de OpenWeatherMap
 const apiKey = '306d7aae049f78a184aec7e1656ad106';
@@ -244,6 +293,32 @@ setInterval(obtenerClima, 600000); // 600000ms = 10 minutos
         });
 
 </script>
+
+<script>
+    // Acortador de links
+document.getElementById('shortenBtn').addEventListener('click', () => {
+    const linkInput = document.getElementById('linkInput').value.trim();
+    if (!linkInput) {
+        alert('Por favor, introduce un enlace válido.');
+        return;
+    }
+    fetch(`https://api.tinyurl.com/create?api_token=uNgkjCNTEX3q18C1EF2FW34bttKYDiPVOb9PBL3agbb7kTt1TbXrYyPL12gC`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: linkInput })
+    })
+        .then(response => response.json())
+        .then(data => {
+            const shortenedLink = data.data.tiny_url;
+            document.getElementById('shortenedLink').innerHTML = `<p>Link acortado: <a href="${shortenedLink}" target="_blank">${shortenedLink}</a></p>`;
+        })
+        .catch(error => {
+            console.error('Error al acortar el enlace:', error);
+            document.getElementById('shortenedLink').textContent = 'Error al acortar el enlace.';
+        });
+});
+
+    </script>
 
 </body>
 </html>
