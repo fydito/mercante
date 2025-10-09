@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,96 +9,104 @@
     <link rel="icon" href="icon.ico">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 </head>
+
 <body>
     <header>
         <h1>Dashboard de Herramientas</h1>
         <img id="logo" src="logo.png" alt="logo hospital" title="Hospital Mercante">
     </header>
-<div id="hora-container">
-    <div id="hora">--:--:--</div>
-</div>
-
-
-<div id="dashboard">
-    <h1>Dashboard del Clima</h1>
-    <div id="ciudad">Ciudad: --</div>
-    <div id="clima">Temperatura: --°C</div>
-    <div id="condicion">Condición: --</div>
-    <div id="viento">Velocidad del viento: -- km/h</div>
-    <div id="humedad">Humedad: --%</div>
-    <div id="sensacion">Sensación térmica: --°C</div>
-    <div id="datos-curiosos">
-        <h3>Frase para pensar:</h3>
-        <p>Los
-            interrogantes más sencillos
-            son los más profundos.
-            ¿Dónde has nacido? ¿Dónde está tu hogar?
-            ¿Adónde vas?
-            ¿Que haces?
-            Plantéatelos de tiempo en tiempo,
-            y observa cómo cambian
-            tus respuestas.</p>
+    <div id="hora-container">
+        <div id="hora">--:--:--</div>
     </div>
 
-<div>
 
-</div>
-</div>
+    <div id="dashboard">
+        <h1>Dashboard del Clima</h1>
+        <div id="ciudad">Ciudad: --</div>
+        <div id="clima">Temperatura: --°C</div>
+        <div id="condicion">Condición: --</div>
+        <div id="viento">Velocidad del viento: -- km/h</div>
+        <div id="humedad">Humedad: --%</div>
+        <div id="sensacion">Sensación térmica: --°C</div>
+        <div id="datos-curiosos">
+            <div class="frase">
+                <h3 id="frase-titulo"></h3>
+                <p id="frase-texto"></p>
 
- <!-- Sección de conversión de imágenes -->
- <div class="image-converter">
-    <h2>Convertidor de Imágenes</h2>
-    <label for="fileInput">Selecciona el archivo:</label>
-    <input type="file" id="fileInput" accept="image/*">
-    
-    <div>
-        <button id="convertToPng">Convertir a PNG</button>
-        <button id="convertToJpg">Convertir a JPG</button>
-        <button id="convertToWebp">Convertir a WEBP</button>
-        <button id="convertToGif">Convertir a GIF</button>
+            </div>
+            <script src="frases.js"></script>
+        </div>
+
+
+        <div>
+
+        </div>
     </div>
 
-    <canvas id="canvas" style="display:none;"></canvas>
-    <a id="downloadLink" style="display:none;">Descargar imagen convertida</a>
-</div>
+    <!-- Sección de conversión de imágenes -->
+    <div class="image-converter">
+        <h2>Convertidor de Imágenes</h2>
+        <label for="fileInput">Selecciona el archivo:</label>
+        <input type="file" id="fileInput" accept="image/*">
 
-<!-- Acortador de Links -->
-<div class="link-shortener">
-    <h2>Acortador de Links</h2>
-    <label for="linkInput">Introduce el enlace:</label>
-    <input type="url" id="linkInput" placeholder="https://example.com" required>
-    <button id="shortenBtn">Acortar Link</button>
-    <div id="shortenedLink" style="margin-top: 1rem;"></div>
-</div>
+        <div>
+            <button id="convertToPng">Convertir a PNG</button>
+            <button id="convertToJpg">Convertir a JPG</button>
+            <button id="convertToWebp">Convertir a WEBP</button>
+            <button id="convertToGif">Convertir a GIF</button>
+        </div>
+
+        <canvas id="canvas" style="display:none;"></canvas>
+        <a id="downloadLink" style="display:none;">Descargar imagen convertida</a>
+    </div>
+
+    <!-- Acortador de Links -->
+    <div class="link-shortener">
+        <h2>Acortador de Links</h2>
+        <label for="linkInput">Introduce el enlace:</label>
+        <input type="url" id="linkInput" placeholder="https://example.com" required>
+        <button id="shortenBtn">Acortar Link</button>
+        <div id="shortenedLink" style="margin-top: 1rem;"></div>
+    </div>
 
 
- <!-- Generador de Código QR -->
+    <!-- Generador de Código QR -->
     <form>
         <h2>Generador de Código QR</h2>
         <label for="nombre">URL para el Código QR:</label>
         <input type="text" id="nombre" placeholder="Introduce la URL...">
-        
+
         <button type="button" onclick="generarCodigoQR()">Generar Código QR</button>
         <button type="reset">Limpiar Formulario</button>
 
         <div id="codigoQR"></div>
     </form>
 
-<!-- Convertidor de Texto a Voz -->
-<div class="voice-container">
-    <h2>Convertidor de Texto a Voz</h2>
-    <textarea id="text-input" rows="10" cols="50" placeholder="Escribe el texto aquí..."></textarea><br>
+    <!-- Convertidor de Texto a Voz -->
+    <div class="voice-container">
+        <h2>Convertidor de Texto a Voz</h2>
+        <textarea id="text-input" rows="10" cols="50" placeholder="Escribe el texto aquí..."></textarea><br>
 
-    <label for="voice-select">Selecciona una voz:</label>
-    <select id="voice-select"></select><br>
+        <label for="voice-select">Selecciona una voz:</label>
+        <select id="voice-select"></select><br>
 
-    <button id="speak-btn">Hablar</button>
-    <button id="stop-btn">Detener</button>
-</div>
-<iframe src="https://heyzine.com/flip-book/256e793b25.html" width="100%" height="600px" frameborder="0" allowfullscreen>
-</iframe>
-
-<!-- <div class="audio-controls">
+        <button id="speak-btn">Hablar</button>
+        <button id="stop-btn">Detener</button>
+    </div>
+    <div id="dashboard">
+        <div class="revistas">
+            <a href="https://heyzine.com/flip-book/4ed7e834f0.html" target="_blank">
+                <img src="revista1.jpg" alt="Revista 1">
+            </a>
+            <a href="https://heyzine.com/flip-book/720121aec8.html" target="_blank">
+                <img src="revista2.jpg" alt="Revista 2">
+            </a>
+            <a href="https://heyzine.com/flip-book/256e793b25.html" target="_blank">
+                <img src="revista3.jpg" alt="Revista 3">
+            </a>
+        </div>
+    </div>
+    <!-- <div class="audio-controls">
     <button id="rec-btn">Rec</button>
     <button id="stop-rec-btn" disabled>Terminar Grabación</button>
     <div class="button-group">
@@ -154,57 +163,57 @@
                 let[_{{{CITATION{{{_1{](https://github.com/la9una/web/tree/ba1073ae044ebb7b538a3b13f0f9598f7c410bb6/docs%2Fbootstrap%2Falignci.md)
 
                 </script>         -->
-                
-                
-<script>
-// API key de OpenWeatherMap
-const apiKey = '306d7aae049f78a184aec7e1656ad106';
-const ciudad = 'José C. Paz,Buenos Aires'; // Cambia la localidad según tu necesidad
 
-// Función para obtener y mostrar los datos del clima
-function obtenerClima() {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`)
-    .then(response => response.json())
-    .then(data => {
-        const nombreCiudad = data.name;
-        const temperatura = data.main.temp;
-        const condicion = data.weather[0].description;
-        const viento = data.wind.speed;
-        const humedad = data.main.humidity;
-        const sensacion = data.main.feels_like;
 
-        // Mostrar datos en el dashboard
-        document.getElementById('ciudad').textContent = `Ciudad: ${nombreCiudad}`;
-        document.getElementById('clima').textContent = `Temperatura: ${temperatura}°C`;
-        document.getElementById('condicion').textContent = `Condición: ${condicion.charAt(0).toUpperCase() + condicion.slice(1)}`;
-        document.getElementById('viento').textContent = `Velocidad del viento: ${viento} km/h`;
-        document.getElementById('humedad').textContent = `Humedad: ${humedad}%`;
-        document.getElementById('sensacion').textContent = `Sensación térmica: ${sensacion}°C`;
-    })
-    .catch(error => {
-        document.getElementById('clima').textContent = 'No se pudo obtener el clima.';
-        console.error('Error al obtener el clima:', error);
-    });
-}
+    <script>
+        // API key de OpenWeatherMap
+        const apiKey = '306d7aae049f78a184aec7e1656ad106';
+        const ciudad = 'José C. Paz,Buenos Aires'; // Cambia la localidad según tu necesidad
 
-// Función para mostrar la hora actual
-function mostrarHora() {
-    const fecha = new Date();
-    const horas = fecha.getHours().toString().padStart(2, '0');
-    const minutos = fecha.getMinutes().toString().padStart(2, '0');
-    const segundos = fecha.getSeconds().toString().padStart(2, '0');
-    document.getElementById('hora').textContent = `${horas}:${minutos}:${segundos}`;
-}
+        // Función para obtener y mostrar los datos del clima
+        function obtenerClima() {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`)
+                .then(response => response.json())
+                .then(data => {
+                    const nombreCiudad = data.name;
+                    const temperatura = data.main.temp;
+                    const condicion = data.weather[0].description;
+                    const viento = data.wind.speed;
+                    const humedad = data.main.humidity;
+                    const sensacion = data.main.feels_like;
 
-// Actualiza la hora cada segundo
-setInterval(mostrarHora, 1000);
+                    // Mostrar datos en el dashboard
+                    document.getElementById('ciudad').textContent = `Ciudad: ${nombreCiudad}`;
+                    document.getElementById('clima').textContent = `Temperatura: ${temperatura}°C`;
+                    document.getElementById('condicion').textContent = `Condición: ${condicion.charAt(0).toUpperCase() + condicion.slice(1)}`;
+                    document.getElementById('viento').textContent = `Velocidad del viento: ${viento} km/h`;
+                    document.getElementById('humedad').textContent = `Humedad: ${humedad}%`;
+                    document.getElementById('sensacion').textContent = `Sensación térmica: ${sensacion}°C`;
+                })
+                .catch(error => {
+                    document.getElementById('clima').textContent = 'No se pudo obtener el clima.';
+                    console.error('Error al obtener el clima:', error);
+                });
+        }
 
-// Obtiene el clima al cargar la página y luego cada 10 minutos
-obtenerClima();
-setInterval(obtenerClima, 600000); // 600000ms = 10 minutos
+        // Función para mostrar la hora actual
+        function mostrarHora() {
+            const fecha = new Date();
+            const horas = fecha.getHours().toString().padStart(2, '0');
+            const minutos = fecha.getMinutes().toString().padStart(2, '0');
+            const segundos = fecha.getSeconds().toString().padStart(2, '0');
+            document.getElementById('hora').textContent = `${horas}:${minutos}:${segundos}`;
+        }
 
- // Código para el Generador de Código QR
- function generarCodigoQR() {
+        // Actualiza la hora cada segundo
+        setInterval(mostrarHora, 1000);
+
+        // Obtiene el clima al cargar la página y luego cada 10 minutos
+        obtenerClima();
+        setInterval(obtenerClima, 600000); // 600000ms = 10 minutos
+
+        // Código para el Generador de Código QR
+        function generarCodigoQR() {
             var nombre = document.getElementById('nombre').value;
             var datos = `${nombre}\n`;
 
@@ -215,8 +224,8 @@ setInterval(obtenerClima, 600000); // 600000ms = 10 minutos
                 text: datos,
                 width: 180,
                 height: 180,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
+                colorDark: "#000000",
+                colorLight: "#ffffff",
             });
         }
 
@@ -225,7 +234,7 @@ setInterval(obtenerClima, 600000); // 600000ms = 10 minutos
         const voiceSelect = document.getElementById('voice-select');
         const speakBtn = document.getElementById('speak-btn');
         const stopBtn = document.getElementById('stop-btn');
-        
+
         let synth = window.speechSynthesis;
         let voices = [];
 
@@ -304,55 +313,57 @@ setInterval(obtenerClima, 600000); // 600000ms = 10 minutos
         document.getElementById('convertToGif').addEventListener('click', function() {
             convertAndDownload('image/gif');
         });
+    </script>
 
-</script>
+    <script>
+        // Acortador de links
+        document.getElementById('shortenBtn').addEventListener('click', async() => {
+            const linkInput = document.getElementById('linkInput').value.trim();
+            const resultDiv = document.getElementById('shortenedLink');
 
-<script>
-    // Acortador de links
-document.getElementById('shortenBtn').addEventListener('click', async () => {
-    const linkInput = document.getElementById('linkInput').value.trim();
-    const resultDiv = document.getElementById('shortenedLink');
-
-    if (!linkInput) {
-        alert('Por favor, introduce un enlace válido.');
-        return;
-    }
-    const cleanUrl = linkInput.split('?')[0]; // elimina todo lo que venga después del signo ?
-if (linkInput.includes("linktr.ee")) {
-    document.getElementById('shortenedLink').innerHTML = `
+            if (!linkInput) {
+                alert('Por favor, introduce un enlace válido.');
+                return;
+            }
+            const cleanUrl = linkInput.split('?')[0]; // elimina todo lo que venga después del signo ?
+            if (linkInput.includes("linktr.ee")) {
+                document.getElementById('shortenedLink').innerHTML = `
   <p>⚠️ Linktree no permite acortar sus enlaces.<br>
   Usá el link original o su propio acortador:
   <a href="https://tr.ee/" target="_blank">https://tr.ee/</a></p>`;
 
-    return;
-}
+                return;
+            }
 
-    try {
-        const response = await fetch('https://api.tinyurl.com/create', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer uNgkjCNTEX3q18C1EF2FW34bttKYDiPVOb9PBL3agbb7kTt1TbXrYyPL12gC',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: cleanUrl })
+            try {
+                const response = await fetch('https://api.tinyurl.com/create', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer uNgkjCNTEX3q18C1EF2FW34bttKYDiPVOb9PBL3agbb7kTt1TbXrYyPL12gC',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        url: cleanUrl
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.data && data.data.tiny_url) {
+                    const shortenedLink = data.data.tiny_url;
+                    resultDiv.innerHTML = `<p>Link acortado: <a href="${shortenedLink}" target="_blank">${shortenedLink}</a></p>`;
+                } else {
+                    console.error('Respuesta inesperada:', data);
+                    resultDiv.textContent = 'No se pudo acortar el enlace. Verificá el token o la respuesta de la API.';
+                }
+
+            } catch (error) {
+                console.error('Error al acortar el enlace:', error);
+                resultDiv.textContent = 'Error al conectar con TinyURL.';
+            }
         });
-
-        const data = await response.json();
-
-        if (data.data && data.data.tiny_url) {
-            const shortenedLink = data.data.tiny_url;
-            resultDiv.innerHTML = `<p>Link acortado: <a href="${shortenedLink}" target="_blank">${shortenedLink}</a></p>`;
-        } else {
-            console.error('Respuesta inesperada:', data);
-            resultDiv.textContent = 'No se pudo acortar el enlace. Verificá el token o la respuesta de la API.';
-        }
-
-    } catch (error) {
-        console.error('Error al acortar el enlace:', error);
-        resultDiv.textContent = 'Error al conectar con TinyURL.';
-    }
-});
-</script>
+    </script>
 
 </body>
+
 </html>
