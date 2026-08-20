@@ -339,15 +339,20 @@
             }
 
           try {
-            const response = await fetch(
-            'https://is.gd/create.php?format=json&url=' +
-            encodeURIComponent(cleanUrl)
-    );
+          const response = await fetch('https://shrtr.top/api/v1/shorten', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            url: cleanUrl
+        })
+    });
 
     const data = await response.json();
 
-    if (data.shorturl) {
-        const shortenedLink = data.shorturl;
+    if (data.short_url) {
+        const shortenedLink = data.short_url;
 
         resultDiv.innerHTML = `
             <p>Link acortado:
@@ -360,7 +365,7 @@
 
 } catch (error) {
     console.error('Error al acortar el enlace:', error);
-    resultDiv.textContent = 'Error al conectar con is.gd.';
+    resultDiv.textContent = 'Error al conectar con el acortador.';
 }
         });
     </script>
