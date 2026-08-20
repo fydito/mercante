@@ -319,7 +319,7 @@
     </script>
 
 <script>
-    // Acortador de links con v.gd usando JSONP
+    // Acortador de links con v.gd
     document.getElementById('shortenBtn').addEventListener('click', () => {
 
         const linkInput = document.getElementById('linkInput').value.trim();
@@ -330,7 +330,7 @@
             return;
         }
 
-        // Linktree
+        // Evitar Linktree
         if (linkInput.includes("linktr.ee")) {
             resultDiv.innerHTML = `
                 <p>⚠️ Linktree no permite acortar sus enlaces.<br>
@@ -340,11 +340,10 @@
             return;
         }
 
-        // Nombre único para la función callback
-        const callbackName = 'vgdCallback_' + Date.now();
+        resultDiv.textContent = 'Acortando enlace...';
 
-        // Función que recibirá la respuesta de v.gd
-        window[callbackName] = function(data) {
+        // Callback fijo para recibir la respuesta
+        window.recibirVGD = function(data) {
 
             if (data.shorturl) {
 
@@ -359,34 +358,28 @@
 
             } else {
 
-                console.error('Respuesta de v.gd:', data);
+                console.error('Error de v.gd:', data);
 
                 resultDiv.textContent =
-                    'No se pudo acortar el enlace.';
+                    'No se pudo acortar el enlace: ' +
+                    (data.errormessage || 'Error desconocido');
             }
-
-            // Limpieza
-            delete window[callbackName];
-
-            const script = document.getElementById(callbackName);
-            if (script) script.remove();
         };
 
         // Crear llamada JSONP
         const script = document.createElement('script');
 
-        script.id = callbackName;
-
         script.src =
             'https://v.gd/create.php?format=json' +
-            '&callback=' + callbackName +
+            '&callback=recibirVGD' +
             '&url=' + encodeURIComponent(linkInput);
 
         script.onerror = function() {
-            resultDiv.textContent =
-                'Error al conectar con v.gd.';
+            resultDiv.textContent = 'Error al conectar con v.gd.';
+            script.remove();
+        };
 
-            delete window[callbackName];
+        script.onload = function() {
             script.remove();
         };
 
