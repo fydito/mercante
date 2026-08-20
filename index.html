@@ -339,9 +339,9 @@
             }
 
           try {
-    const response = await fetch(
-        'https://is.gd/create.php?format=json&url=' +
-        encodeURIComponent(cleanUrl)
+            const response = await fetch(
+            'https://is.gd/create.php?format=json&url=' +
+            encodeURIComponent(cleanUrl)
     );
 
     const data = await response.json();
