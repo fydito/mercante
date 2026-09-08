@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icon.ico">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 </head>
 
 <body>
@@ -36,6 +37,7 @@
                 <a href="#seccion-antiguedad" title="Ir al calculador de antigüedad"><span>📆</span><small>Antigüedad</small></a>
                 <a href="#seccion-feriado" title="Ir al próximo feriado"><span>🇦🇷</span><small>Feriado</small></a>
                 <a href="#seccion-horoscopo" title="Ir al horóscopo semanal"><span>🔮</span><small>Horóscopo</small></a>
+                <a href="#seccion-pdf" title="Ir a las herramientas PDF"><span>📄</span><small>PDF</small></a>
                 <a href="#seccion-notas" title="Ir al bloc de notas"><span>📝</span><small>Notas</small></a>
             </nav>
         </div>
@@ -198,6 +200,73 @@
 
 
     <!-- Bloc de notas -->
+    
+    <div class="utility-card pdf-card">
+        <h2 id="seccion-pdf">📄 Herramientas PDF</h2>
+        <p class="pdf-intro">Uní, separá o creá PDFs directamente en tu navegador. Los archivos se procesan localmente.</p>
+
+        <div class="pdf-tabs">
+            <button type="button" class="pdf-tab active" data-pdf-tab="unir">🔗 Unir</button>
+            <button type="button" class="pdf-tab" data-pdf-tab="separar">✂️ Separar</button>
+            <button type="button" class="pdf-tab" data-pdf-tab="imagenes">🖼️ Imagen → PDF</button>
+            <button type="button" class="pdf-tab" data-pdf-tab="texto">📝 Texto → PDF</button>
+        </div>
+
+        <div class="pdf-panel active" id="pdf-unir">
+            <h3>🔗 Unir varios PDFs</h3>
+            <p>Elegí dos o más archivos. Se unirán en el orden seleccionado.</p>
+            <input type="file" id="pdfMergeFiles" accept=".pdf,application/pdf" multiple>
+            <div id="pdfMergeList" class="pdf-file-list"></div>
+            <button type="button" id="pdfMergeBtn">Unir y descargar PDF</button>
+            <div id="pdfMergeStatus" class="pdf-status"></div>
+        </div>
+
+        <div class="pdf-panel" id="pdf-separar">
+            <h3>✂️ Separar / extraer páginas</h3>
+            <p>Ejemplo: <strong>1-3, 5, 8-10</strong>.</p>
+            <input type="file" id="pdfSplitFile" accept=".pdf,application/pdf">
+            <label for="pdfPages">Páginas a extraer:</label>
+            <input type="text" id="pdfPages" placeholder="Ej.: 1-3, 5, 8-10">
+            <button type="button" id="pdfSplitBtn">Extraer y descargar PDF</button>
+            <div id="pdfSplitStatus" class="pdf-status"></div>
+        </div>
+
+        <div class="pdf-panel" id="pdf-imagenes">
+            <h3>🖼️ Imágenes → PDF</h3>
+            <p>Seleccioná una o varias imágenes. Cada una ocupará una página.</p>
+            <input type="file" id="pdfImageFiles" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple>
+            <div class="pdf-options-row">
+                <div><label for="pdfImageSize">Tamaño:</label>
+                    <select id="pdfImageSize"><option value="a4">A4</option><option value="original">Tamaño de imagen</option></select>
+                </div>
+                <div><label for="pdfImageOrientation">Orientación:</label>
+                    <select id="pdfImageOrientation"><option value="auto">Automática</option><option value="portrait">Vertical</option><option value="landscape">Horizontal</option></select>
+                </div>
+            </div>
+            <div id="pdfImageList" class="pdf-file-list"></div>
+            <button type="button" id="pdfImagesBtn">Crear y descargar PDF</button>
+            <div id="pdfImagesStatus" class="pdf-status"></div>
+        </div>
+
+        <div class="pdf-panel" id="pdf-texto">
+            <h3>📝 Texto → PDF</h3>
+            <label for="pdfTextTitle">Título:</label>
+            <input type="text" id="pdfTextTitle" placeholder="Ej.: Nota interna">
+            <label for="pdfTextContent">Texto:</label>
+            <textarea id="pdfTextContent" rows="12" placeholder="Escribí o pegá el texto acá..."></textarea>
+            <div class="pdf-options-row">
+                <div><label for="pdfTextSize">Tamaño de letra:</label>
+                    <select id="pdfTextSize"><option>10</option><option>11</option><option selected>12</option><option>14</option><option>16</option></select>
+                </div>
+                <div><label for="pdfTextFilename">Nombre del archivo:</label>
+                    <input type="text" id="pdfTextFilename" placeholder="documento">
+                </div>
+            </div>
+            <button type="button" id="pdfTextBtn">Crear y descargar PDF</button>
+            <div id="pdfTextStatus" class="pdf-status"></div>
+        </div>
+    </div>
+
     <div class="utility-card notas-card">
         <h2 id="seccion-notas">📝 Bloc de Notas</h2>
         <p class="utility-muted notas-ayuda">Escribí tranquilo: la nota queda guardada automáticamente en este navegador.</p>
@@ -894,6 +963,122 @@
 
         actualizarBoton();
     })();
+</script>
+
+
+<script>
+(function () {
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+    const status = (id, msg, type='') => {
+        const e=document.getElementById(id); e.textContent=msg; e.className='pdf-status '+type;
+    };
+    const download = (bytes,name) => {
+        const u=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
+        const a=document.createElement('a'); a.href=u; a.download=name; a.click();
+        setTimeout(()=>URL.revokeObjectURL(u),1500);
+    };
+    const safe = s => (s||'documento').trim().replace(/[<>:"/\\\\|?*\x00-\x1F]/g,'') || 'documento';
+
+    document.querySelectorAll('.pdf-tab').forEach(b=>b.onclick=()=>{
+        document.querySelectorAll('.pdf-tab,.pdf-panel').forEach(x=>x.classList.remove('active'));
+        b.classList.add('active'); document.getElementById('pdf-'+b.dataset.pdfTab).classList.add('active');
+    });
+
+    function listFiles(inputId,listId){
+        const i=document.getElementById(inputId), l=document.getElementById(listId);
+        i.onchange=()=>{l.innerHTML=''; [...i.files].forEach((f,n)=>{const d=document.createElement('div');d.textContent=`${n+1}. ${f.name}`;l.appendChild(d);});};
+    }
+    listFiles('pdfMergeFiles','pdfMergeList'); listFiles('pdfImageFiles','pdfImageList');
+
+    document.getElementById('pdfMergeBtn').onclick=async()=>{
+        const files=[...document.getElementById('pdfMergeFiles').files];
+        if(files.length<2) return status('pdfMergeStatus','Elegí al menos dos PDFs.','error');
+        try{
+            status('pdfMergeStatus','Uniendo archivos...');
+            const out=await PDFDocument.create();
+            for(const f of files){const src=await PDFDocument.load(await f.arrayBuffer()); const ps=await out.copyPages(src,src.getPageIndices()); ps.forEach(p=>out.addPage(p));}
+            download(await out.save(),'PDF_unidos.pdf'); status('pdfMergeStatus',`Listo: ${files.length} PDFs unidos.`,'ok');
+        }catch(e){console.error(e);status('pdfMergeStatus','No se pudieron unir. Verificá que los PDFs no estén protegidos.','error');}
+    };
+
+    function pages(text,total){
+        const out=[], seen=new Set();
+        for(const part of text.split(',').map(x=>x.trim()).filter(Boolean)){
+            let nums=[];
+            if(/^\d+$/.test(part)) nums=[+part];
+            else {const m=part.match(/^(\d+)\s*-\s*(\d+)$/); if(!m) throw 0; let a=+m[1],b=+m[2]; if(a>b)[a,b]=[b,a]; for(let n=a;n<=b;n++)nums.push(n);}
+            for(const n of nums){if(n<1||n>total)throw 0;if(!seen.has(n)){seen.add(n);out.push(n-1);}}
+        }
+        if(!out.length) throw 0; return out;
+    }
+
+    document.getElementById('pdfSplitBtn').onclick=async()=>{
+        const f=document.getElementById('pdfSplitFile').files[0], r=document.getElementById('pdfPages').value;
+        if(!f||!r.trim()) return status('pdfSplitStatus','Elegí un PDF e indicá las páginas.','error');
+        try{
+            const src=await PDFDocument.load(await f.arrayBuffer()), idx=pages(r,src.getPageCount()), out=await PDFDocument.create();
+            (await out.copyPages(src,idx)).forEach(p=>out.addPage(p));
+            download(await out.save(),safe(f.name.replace(/\.pdf$/i,'')+'_paginas')+'.pdf');
+            status('pdfSplitStatus',`Listo: ${idx.length} página(s) extraída(s).`,'ok');
+        }catch(e){status('pdfSplitStatus','Revisá el rango. Ejemplo: 1-3, 5, 8-10.','error');}
+    };
+
+    async function imageBytes(f){
+        if(f.type==='image/jpeg')return ['jpg',await f.arrayBuffer()];
+        if(f.type==='image/png')return ['png',await f.arrayBuffer()];
+        const url=await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f);});
+        const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url;});
+        const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);
+        const blob=await new Promise(ok=>c.toBlob(ok,'image/png')); return ['png',await blob.arrayBuffer()];
+    }
+
+    document.getElementById('pdfImagesBtn').onclick=async()=>{
+        const fs=[...document.getElementById('pdfImageFiles').files];
+        if(!fs.length)return status('pdfImagesStatus','Elegí al menos una imagen.','error');
+        try{
+            status('pdfImagesStatus','Creando PDF...');
+            const pdf=await PDFDocument.create(), mode=document.getElementById('pdfImageSize').value, ori=document.getElementById('pdfImageOrientation').value;
+            for(const f of fs){
+                const [t,b]=await imageBytes(f), im=t==='jpg'?await pdf.embedJpg(b):await pdf.embedPng(b);
+                let pw,ph;
+                if(mode==='original'){pw=im.width;ph=im.height;if(ori==='portrait'&&pw>ph)[pw,ph]=[ph,pw];if(ori==='landscape'&&ph>pw)[pw,ph]=[ph,pw];}
+                else {const o=ori==='auto'?(im.width>im.height?'landscape':'portrait'):ori; [pw,ph]=o==='landscape'?[841.89,595.28]:[595.28,841.89];}
+                const p=pdf.addPage([pw,ph]), m=mode==='a4'?28:0, scale=Math.min((pw-2*m)/im.width,(ph-2*m)/im.height), w=im.width*scale,h=im.height*scale;
+                p.drawImage(im,{x:(pw-w)/2,y:(ph-h)/2,width:w,height:h});
+            }
+            download(await pdf.save(),'imagenes.pdf');status('pdfImagesStatus',`Listo: ${fs.length} imagen(es) convertida(s).`,'ok');
+        }catch(e){console.error(e);status('pdfImagesStatus','No se pudo crear el PDF.','error');}
+    };
+
+    function wrap(text,font,size,max){
+        const lines=[];
+        for(const para of text.replace(/\r/g,'').split('\n')){
+            if(!para.trim()){lines.push('');continue;}
+            let line='';
+            for(const word of para.split(/\s+/)){
+                const test=line?line+' '+word:word;
+                if(font.widthOfTextAtSize(test,size)<=max) line=test;
+                else {if(line)lines.push(line); line=word;}
+            }
+            if(line)lines.push(line);
+        }
+        return lines;
+    }
+
+    document.getElementById('pdfTextBtn').onclick=async()=>{
+        const title=document.getElementById('pdfTextTitle').value.trim(), text=document.getElementById('pdfTextContent').value, size=+document.getElementById('pdfTextSize').value;
+        if(!title&&!text.trim())return status('pdfTextStatus','Escribí un título o algún texto.','error');
+        try{
+            const pdf=await PDFDocument.create(), normal=await pdf.embedFont(StandardFonts.Helvetica), bold=await pdf.embedFont(StandardFonts.HelveticaBold);
+            const W=595.28,H=841.89,M=55,max=W-2*M; let p=pdf.addPage([W,H]),y=H-M;
+            const put=(line,font,sz)=>{if(y<M+sz){p=pdf.addPage([W,H]);y=H-M;}if(line)p.drawText(line,{x:M,y,size:sz,font,color:rgb(.18,.18,.2)});y-=sz*1.45;};
+            if(title){wrap(title,bold,20,max).forEach(x=>put(x,bold,20));y-=10;}
+            wrap(text,normal,size,max).forEach(x=>put(x,normal,size));
+            const name=safe(document.getElementById('pdfTextFilename').value||title||'documento');
+            download(await pdf.save(),name+'.pdf');status('pdfTextStatus','PDF creado y descargado.','ok');
+        }catch(e){console.error(e);status('pdfTextStatus','No se pudo crear. Probá quitar emojis o símbolos especiales del texto.','error');}
+    };
+})();
 </script>
 
 </body>

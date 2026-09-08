@@ -1120,3 +1120,28 @@ html[data-theme="dark"] .horoscopo-card a,
 html[data-theme="dark"] .notas-card a {
     color: #b998ff;
 }
+
+/* ===== Herramientas PDF ===== */
+.pdf-card{grid-column:1/-1}
+.pdf-intro{margin:-8px 0 22px;color:#666}
+.pdf-tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid #e4e4e4}
+.pdf-tabs .pdf-tab{margin:0;background:#f1ebff;color:#6200ea;border:1px solid #d9c8ff;box-shadow:none}
+.pdf-tabs .pdf-tab:hover{background:#e5d8ff;color:#3700b3}
+.pdf-tabs .pdf-tab.active{background:#6200ea;color:#fff;border-color:#6200ea}
+.pdf-panel{display:none}.pdf-panel.active{display:block}
+.pdf-panel h3{margin:0 0 10px;color:#333;font-size:1.25rem}.pdf-panel>p{margin:0 0 16px;color:#666}
+.pdf-file-list{margin:0 0 14px;max-height:150px;overflow-y:auto}
+.pdf-file-list div{padding:7px 10px;margin-bottom:5px;background:#f6f6f8;border-radius:6px;overflow-wrap:anywhere}
+.pdf-options-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.pdf-status{min-height:24px;margin-top:12px;font-weight:600}.pdf-status.ok{color:#388e3c}.pdf-status.error{color:#c62828}
+html[data-theme="dark"] .pdf-card{background:#232733!important;color:#e8eaf0!important}
+html[data-theme="dark"] .pdf-intro,html[data-theme="dark"] .pdf-panel>p{color:#b8bec9}
+html[data-theme="dark"] .pdf-tabs{border-bottom-color:#3c4352}
+html[data-theme="dark"] .pdf-tabs .pdf-tab{background:#191d27;color:#c9b3ff;border-color:#454b5b}
+html[data-theme="dark"] .pdf-tabs .pdf-tab:hover{background:#302641;color:#e0d4ff}
+html[data-theme="dark"] .pdf-tabs .pdf-tab.active{background:#7b28ef;color:#fff;border-color:#7b28ef}
+html[data-theme="dark"] .pdf-panel h3{color:#f1f3f8}
+html[data-theme="dark"] .pdf-file-list div{background:#191d27;color:#dfe3ea}
+html[data-theme="dark"] .pdf-status.ok{color:#78d680}html[data-theme="dark"] .pdf-status.error{color:#ff8d8d}
+#seccion-pdf{scroll-margin-top:24px}
+@media(max-width:700px){.pdf-tabs{display:grid;grid-template-columns:1fr 1fr}.pdf-tabs .pdf-tab{width:100%}.pdf-options-row{grid-template-columns:1fr;gap:0}}
