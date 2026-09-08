@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fydito PONG!</title>
+    <link rel="stylesheet" href="pong.css">
+</head>
+<body>
+    <main class="game-shell">
+        <header class="game-header">
+            <div>
+                <h1>🏓 Fydito PONG!</h1>
+                <p>Jugador vs CPU</p>
+            </div>
+            <button id="startBtn" type="button">Iniciar / Reiniciar</button>
+        </header>
+
+        <section class="scoreboard">
+            <div>
+                <span class="score-label">JUGADOR</span>
+                <strong id="playerScore">0</strong>
+            </div>
+
+            <div class="center-info">
+                <span id="status">Presioná ESPACIO o Iniciar</span>
+            </div>
+
+            <div>
+                <span class="score-label">CPU</span>
+                <strong id="cpuScore">0</strong>
+            </div>
+        </section>
+
+        <div class="canvas-wrap">
+            <canvas id="pongCanvas" width="900" height="500"></canvas>
+        </div>
+
+        <footer>
+            <span>⬆️⬇️ / W S para mover</span>
+            <span>ESPACIO para comenzar</span>
+            <span>Primero en 7 gana</span>
+        </footer>
+    </main>
+
+    <script src="pong.js"></script>
+</body>
+</html>

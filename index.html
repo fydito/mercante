@@ -1313,6 +1313,71 @@
         })();
     </script>
 
+    <!-- Easter egg: Fydito PONG -->
+    <div id="fydito-pong-overlay" aria-hidden="true">
+        <div class="fydito-pong-window" role="dialog" aria-modal="true" aria-label="Fydito PONG">
+            <div class="fydito-pong-bar">
+                <strong>🏓 Fydito PONG!</strong>
+                <span>ESC para volver al escritorio</span>
+            </div>
+            <iframe id="fydito-pong-frame" src="pong.html" title="Fydito PONG"></iframe>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            const logo = document.getElementById('logo');
+            const overlay = document.getElementById('fydito-pong-overlay');
+            const frame = document.getElementById('fydito-pong-frame');
+
+            function abrirFyditoPong() {
+                overlay.classList.add('activo');
+                overlay.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('fydito-pong-abierto');
+                setTimeout(() => frame.focus(), 50);
+            }
+
+            function cerrarFyditoPong() {
+                overlay.classList.remove('activo');
+                overlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('fydito-pong-abierto');
+                logo.focus({ preventScroll: true });
+            }
+
+            logo.setAttribute('tabindex', '0');
+
+            logo.addEventListener('click', (event) => {
+                if (event.ctrlKey && event.shiftKey) {
+                    event.preventDefault();
+                    abrirFyditoPong();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && overlay.classList.contains('activo')) {
+                    event.preventDefault();
+                    cerrarFyditoPong();
+                }
+            });
+
+            // ESC también funciona aunque el foco esté dentro del juego/iframe.
+            window.addEventListener('message', (event) => {
+                if (event.data === 'FYDITO_PONG_CERRAR') cerrarFyditoPong();
+            });
+
+            frame.addEventListener('load', () => {
+                try {
+                    frame.contentWindow.document.addEventListener('keydown', (event) => {
+                        if (event.key === 'Escape') {
+                            event.preventDefault();
+                            window.postMessage('FYDITO_PONG_CERRAR', '*');
+                        }
+                    });
+                } catch (e) {}
+            });
+        })();
+    </script>
+
 </body>
 
 

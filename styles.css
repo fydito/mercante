@@ -1194,3 +1194,103 @@ html[data-theme="dark"] .pdf-status.ok{color:#78d680}html[data-theme="dark"] .pd
 .firma-gif {
     z-index: 9999;
 }
+
+
+/* ============================================================
+   EASTER EGG - FYDITO PONG
+   Ctrl + Shift + click sobre el logo para abrir.
+   ESC para cerrar y recuperar el escritorio.
+   ============================================================ */
+#logo {
+    cursor: default;
+}
+
+#fydito-pong-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    background: rgba(7, 8, 14, .78);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .18s ease, visibility .18s ease;
+}
+
+#fydito-pong-overlay.activo {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.fydito-pong-window {
+    width: min(1050px, 96vw);
+    height: min(720px, 92vh);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 2px solid #33b4e7;
+    border-radius: 18px;
+    background: #11131a;
+    box-shadow: 0 25px 90px rgba(0, 0, 0, .65);
+    transform: scale(.96);
+    transition: transform .18s ease;
+}
+
+#fydito-pong-overlay.activo .fydito-pong-window {
+    transform: scale(1);
+}
+
+.fydito-pong-bar {
+    flex: 0 0 auto;
+    min-height: 48px;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #4300a6;
+    color: #fff;
+}
+
+.fydito-pong-bar strong {
+    font-size: 1.1rem;
+}
+
+.fydito-pong-bar span {
+    font-size: .82rem;
+    color: rgba(255,255,255,.76);
+}
+
+#fydito-pong-frame {
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    background: #11131a;
+}
+
+body.fydito-pong-abierto {
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    #fydito-pong-overlay {
+        padding: 10px;
+    }
+
+    .fydito-pong-window {
+        width: 100%;
+        height: 94vh;
+        border-radius: 12px;
+    }
+
+    .fydito-pong-bar span {
+        display: none;
+    }
+}
