@@ -815,3 +815,239 @@ header {
         font-size: 0.62rem;
     }
 }
+
+
+/* ============================================================
+   MODO DÍA / NOCHE
+   ============================================================ */
+
+:root {
+    color-scheme: light;
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+/* Botón de tema junto al reloj */
+#theme-toggle {
+    position: absolute;
+    top: 138px;
+    right: 40px;
+    z-index: 11;
+    width: auto;
+    min-width: 126px;
+    height: 42px;
+    padding: 5px 10px;
+    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+#theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.23);
+    transform: none;
+}
+
+#theme-toggle:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.65);
+    outline-offset: 3px;
+}
+
+.theme-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.theme-switch-track {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.42);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.theme-switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease;
+}
+
+html[data-theme="dark"] .theme-switch-thumb {
+    transform: translateX(22px);
+}
+
+/* Transiciones suaves de tema */
+body,
+#dashboard,
+.image-converter,
+.link-shortener,
+form,
+.voice-container,
+.utility-card,
+.audio-controls,
+input,
+textarea,
+select,
+#datos-curiosos,
+.horoscope-result,
+#hora-container {
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+/* ---------- Tema oscuro ---------- */
+
+html[data-theme="dark"] body {
+    background-color: #151821;
+    color: #e8eaf0;
+}
+
+html[data-theme="dark"] header {
+    background-color: #4300a6;
+}
+
+html[data-theme="dark"] #dashboard,
+html[data-theme="dark"] .image-converter,
+html[data-theme="dark"] .link-shortener,
+html[data-theme="dark"] form,
+html[data-theme="dark"] .voice-container,
+html[data-theme="dark"] .utility-card,
+html[data-theme="dark"] .audio-controls {
+    background-color: #232733;
+    color: #e8eaf0;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.34);
+}
+
+html[data-theme="dark"] #dashboard:hover,
+html[data-theme="dark"] .image-converter:hover,
+html[data-theme="dark"] .link-shortener:hover,
+html[data-theme="dark"] form:hover,
+html[data-theme="dark"] .voice-container:hover,
+html[data-theme="dark"] .utility-card:hover {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42);
+}
+
+/* El verde sigue siendo parte de la identidad */
+html[data-theme="dark"] #dashboard h1,
+html[data-theme="dark"] #dashboard h2,
+html[data-theme="dark"] .image-converter h2,
+html[data-theme="dark"] .link-shortener h2,
+html[data-theme="dark"] form h2,
+html[data-theme="dark"] .voice-container h2,
+html[data-theme="dark"] .utility-card h2,
+html[data-theme="dark"] h2 {
+    color: #65c96a;
+}
+
+html[data-theme="dark"] #datos-curiosos {
+    background: #1b3323;
+    color: #e8eaf0;
+}
+
+html[data-theme="dark"] input,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+    background: #171a23;
+    color: #f1f2f5;
+    border-color: #454b5b;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+    color: #9299a8;
+}
+
+html[data-theme="dark"] input:focus,
+html[data-theme="dark"] textarea:focus,
+html[data-theme="dark"] select:focus {
+    border-color: #8f5cff;
+    box-shadow: 0 0 0 3px rgba(143, 92, 255, 0.19);
+}
+
+html[data-theme="dark"] button:not(#theme-toggle) {
+    background-color: #7b28ef;
+}
+
+html[data-theme="dark"] button:not(#theme-toggle):hover {
+    background-color: #9654f3;
+}
+
+html[data-theme="dark"] a {
+    color: #b998ff;
+}
+
+html[data-theme="dark"] #hora-container {
+    background-color: #171a23;
+    border-color: #33b4e7;
+}
+
+html[data-theme="dark"] #hora {
+    color: #dce7ff;
+}
+
+/* Resultados y paneles internos de las nuevas herramientas */
+html[data-theme="dark"] .horoscope-result,
+html[data-theme="dark"] .daily-luck,
+html[data-theme="dark"] .nota-estado,
+html[data-theme="dark"] .resultado-antiguedad,
+html[data-theme="dark"] .feriado-resultado {
+    color: #e8eaf0;
+}
+
+/* Las portadas conservan su aspecto, pero la tarjeta acompaña al tema */
+html[data-theme="dark"] .revistas img {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.42);
+}
+
+/* Accesos rápidos: un poquito más profundos de noche */
+html[data-theme="dark"] .accesos-rapidos a {
+    background: rgba(0, 0, 0, 0.13);
+    border-color: rgba(255, 255, 255, 0.13);
+}
+
+html[data-theme="dark"] .accesos-rapidos a:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive del selector de tema */
+@media (max-width: 1050px) {
+    #theme-toggle {
+        right: 24px;
+        top: 130px;
+    }
+}
+
+@media (max-width: 700px) {
+    #theme-toggle {
+        top: 225px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        min-width: 118px;
+    }
+
+    #theme-toggle:hover {
+        transform: translateX(-50%);
+    }
+}

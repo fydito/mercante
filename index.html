@@ -5,6 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Escritorio de Herramientas</title>
+    <script>
+        (function () {
+            const temaGuardado = localStorage.getItem('mercante-tema');
+            const prefiereOscuro = window.matchMedia &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const temaInicial = temaGuardado || (prefiereOscuro ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', temaInicial);
+        })();
+    </script>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icon.ico">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
@@ -34,6 +43,14 @@
     <div id="hora-container">
         <div id="hora">--:--:--</div>
     </div>
+
+    <button id="theme-toggle" type="button" aria-label="Cambiar entre modo día y noche" title="Cambiar tema">
+        <span class="theme-icon theme-sun" aria-hidden="true">☀️</span>
+        <span class="theme-switch-track" aria-hidden="true">
+            <span class="theme-switch-thumb"></span>
+        </span>
+        <span class="theme-icon theme-moon" aria-hidden="true">🌙</span>
+    </button>
 
 
     <div id="dashboard">
@@ -841,6 +858,41 @@
         if (tituloNota.value || textoNota.value) {
             estadoNota.textContent = 'Nota recuperada de este navegador.';
         }
+    })();
+</script>
+
+
+<script>
+    // ============================================================
+    // Modo día / noche
+    // - Respeta el tema de Windows la primera vez
+    // - Luego recuerda la elección del usuario en este navegador
+    // ============================================================
+    (function () {
+        const CLAVE_TEMA = 'mercante-tema';
+        const botonTema = document.getElementById('theme-toggle');
+
+        function temaActual() {
+            return document.documentElement.getAttribute('data-theme') || 'light';
+        }
+
+        function actualizarBoton() {
+            const oscuro = temaActual() === 'dark';
+            botonTema.setAttribute('aria-pressed', oscuro ? 'true' : 'false');
+            botonTema.title = oscuro ? 'Cambiar a modo día' : 'Cambiar a modo noche';
+        }
+
+        function aplicarTema(tema, guardar = true) {
+            document.documentElement.setAttribute('data-theme', tema);
+            if (guardar) localStorage.setItem(CLAVE_TEMA, tema);
+            actualizarBoton();
+        }
+
+        botonTema.addEventListener('click', () => {
+            aplicarTema(temaActual() === 'dark' ? 'light' : 'dark');
+        });
+
+        actualizarBoton();
     })();
 </script>
 
