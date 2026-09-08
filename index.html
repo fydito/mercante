@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Escritorio de Herramientas</title>
     <script>
-        (function () {
+        (function() {
             const temaGuardado = localStorage.getItem('mercante-tema');
             const prefiereOscuro = window.matchMedia &&
                 window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -19,24 +19,26 @@
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 
-<style>
-#hora-container .firma-jordan{
-    margin-top:4px;
-    text-align:center;
-    font-size:11px;
-    font-weight:500;
-    letter-spacing:.35px;
-    color:rgba(255,255,255,.68);
-    white-space:nowrap;
-    user-select:none;
-}
-html:not([data-theme="dark"]) #hora-container .firma-jordan{
-    color:rgba(55,35,95,.62);
-}
-html[data-theme="dark"] #hora-container .firma-jordan{
-    color:rgba(215,205,255,.72);
-}
-</style>
+    <style>
+        #hora-container .firma-jordan {
+            margin-top: 4px;
+            text-align: right;
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: .35px;
+            color: rgba(255, 255, 255, 0.13);
+            white-space: nowrap;
+            user-select: none;
+        }
+        
+        html:not([data-theme="dark"]) #hora-container .firma-jordan {
+            color: rgba(55, 35, 95, .62);
+        }
+        
+        html[data-theme="dark"] #hora-container .firma-jordan {
+            color: rgba(215, 205, 255, .72);
+        }
+    </style>
 
 </head>
 
@@ -61,11 +63,14 @@ html[data-theme="dark"] #hora-container .firma-jordan{
                 <a href="#seccion-notas" title="Ir al bloc de notas"><span>📝</span><small>Notas</small></a>
             </nav>
         </div>
-        <div class="firma-jordan firma-jordan-esquina">Jordan Molinari</div>
-</header>
+
+    </header>
     <div id="hora-container">
         <div id="hora">--:--:--</div>
+        <div class="firma-jordan firma-jordan-esquina">Desarrollado por Jordan Molinari<img class="firma-gif" src="fydito.gif" alt=""></div>
+
     </div>
+
 
     <button id="theme-toggle" type="button" aria-label="Cambiar entre modo día y noche" title="Cambiar tema">
         <span class="theme-icon theme-sun" aria-hidden="true">☀️</span>
@@ -221,7 +226,7 @@ html[data-theme="dark"] #hora-container .firma-jordan{
 
 
     <!-- Bloc de notas -->
-    
+
     <div class="utility-card pdf-card">
         <h2 id="seccion-pdf">📄 Herramientas PDF</h2>
         <p class="pdf-intro">Uní, separá o creá PDFs directamente en tu navegador. Los archivos se procesan localmente.</p>
@@ -516,220 +521,231 @@ html[data-theme="dark"] #hora-container .firma-jordan{
         });
     </script>
 
-<script>
-    // Acortador de links - TinyURL
-    document.getElementById('shortenBtn').addEventListener('click', async () => {
-        const linkInput = document.getElementById('linkInput').value.trim();
-        const resultDiv = document.getElementById('shortenedLink');
+    <script>
+        // Acortador de links - TinyURL
+        document.getElementById('shortenBtn').addEventListener('click', async() => {
+            const linkInput = document.getElementById('linkInput').value.trim();
+            const resultDiv = document.getElementById('shortenedLink');
 
-        if (!linkInput) {
-            alert('Por favor, introduce un enlace válido.');
-            return;
-        }
+            if (!linkInput) {
+                alert('Por favor, introduce un enlace válido.');
+                return;
+            }
 
-        // Linktree no permite acortar sus enlaces
-        if (linkInput.includes("linktr.ee")) {
-            resultDiv.innerHTML = `
+            // Linktree no permite acortar sus enlaces
+            if (linkInput.includes("linktr.ee")) {
+                resultDiv.innerHTML = `
                 <p>⚠️ Linktree no permite acortar sus enlaces.<br>
                 Usá el link original o su propio acortador:
                 <a href="https://tr.ee/" target="_blank">https://tr.ee/</a></p>
             `;
-            return;
-        }
+                return;
+            }
 
-        resultDiv.textContent = 'Acortando enlace...';
+            resultDiv.textContent = 'Acortando enlace...';
 
-        try {
-            const response = await fetch('https://api.tinyurl.com/create', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer 0gbpVSWoUyY1nebtsG91QVtxcnBvjxLtMMfaZ97U7yb4bP4YEcqEURjX4eDH',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    url: linkInput
-                })
-            });
+            try {
+                const response = await fetch('https://api.tinyurl.com/create', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer 0gbpVSWoUyY1nebtsG91QVtxcnBvjxLtMMfaZ97U7yb4bP4YEcqEURjX4eDH',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        url: linkInput
+                    })
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (data.data && data.data.tiny_url) {
-                const shortenedLink = data.data.tiny_url;
+                if (data.data && data.data.tiny_url) {
+                    const shortenedLink = data.data.tiny_url;
 
-                resultDiv.innerHTML = `
+                    resultDiv.innerHTML = `
                     <p>Link acortado:
                     <a href="${shortenedLink}" target="_blank">
                         ${shortenedLink}
                     </a></p>
                 `;
-            } else {
-                console.error('Respuesta de TinyURL:', data);
+                } else {
+                    console.error('Respuesta de TinyURL:', data);
 
-                resultDiv.textContent =
-                    'No se pudo acortar el enlace. ' +
-                    (data.errors ? data.errors.join(' ') : '');
+                    resultDiv.textContent =
+                        'No se pudo acortar el enlace. ' +
+                        (data.errors ? data.errors.join(' ') : '');
+                }
+
+            } catch (error) {
+                console.error('Error al conectar con TinyURL:', error);
+                resultDiv.textContent = 'Error al conectar con TinyURL.';
+            }
+        });
+    </script>
+
+
+
+    <script>
+        // ============================================================
+        // Utilidades nuevas: antigüedad, próximo feriado y horóscopo
+        // ============================================================
+
+        // ---- Calculador de antigüedad ----
+        const fechaIngresoInput = document.getElementById('fechaIngreso');
+        const fechaCalculoInput = document.getElementById('fechaCalculo');
+        const resultadoAntiguedad = document.getElementById('resultadoAntiguedad');
+        const calcularAntiguedadBtn = document.getElementById('calcularAntiguedadBtn');
+
+        function fechaLocalISO(fecha = new Date()) {
+            const y = fecha.getFullYear();
+            const m = String(fecha.getMonth() + 1).padStart(2, '0');
+            const d = String(fecha.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function crearFechaLocal(valor) {
+            const [y, m, d] = valor.split('-').map(Number);
+            return new Date(y, m - 1, d, 12, 0, 0);
+        }
+
+        function sumarMesesSeguro(fecha, cantidad) {
+            const originalDia = fecha.getDate();
+            const resultado = new Date(fecha.getFullYear(), fecha.getMonth() + cantidad, 1, 12, 0, 0);
+            const ultimoDia = new Date(resultado.getFullYear(), resultado.getMonth() + 1, 0, 12, 0, 0).getDate();
+            resultado.setDate(Math.min(originalDia, ultimoDia));
+            return resultado;
+        }
+
+        function sumarAniosSeguro(fecha, cantidad) {
+            const originalDia = fecha.getDate();
+            const originalMes = fecha.getMonth();
+            const resultado = new Date(fecha.getFullYear() + cantidad, originalMes, 1, 12, 0, 0);
+            const ultimoDia = new Date(resultado.getFullYear(), originalMes + 1, 0, 12, 0, 0).getDate();
+            resultado.setDate(Math.min(originalDia, ultimoDia));
+            return resultado;
+        }
+
+        function diferenciaCalendario(desde, hasta) {
+            let anios = hasta.getFullYear() - desde.getFullYear();
+            let cursor = sumarAniosSeguro(desde, anios);
+
+            if (cursor > hasta) {
+                anios--;
+                cursor = sumarAniosSeguro(desde, anios);
             }
 
-        } catch (error) {
-            console.error('Error al conectar con TinyURL:', error);
-            resultDiv.textContent = 'Error al conectar con TinyURL.';
-        }
-    });
-    
-</script>
-       
+            let meses = 0;
+            while (meses < 11) {
+                const siguiente = sumarMesesSeguro(cursor, 1);
+                if (siguiente > hasta) break;
+                cursor = siguiente;
+                meses++;
+            }
 
-
-<script>
-    // ============================================================
-    // Utilidades nuevas: antigüedad, próximo feriado y horóscopo
-    // ============================================================
-
-    // ---- Calculador de antigüedad ----
-    const fechaIngresoInput = document.getElementById('fechaIngreso');
-    const fechaCalculoInput = document.getElementById('fechaCalculo');
-    const resultadoAntiguedad = document.getElementById('resultadoAntiguedad');
-    const calcularAntiguedadBtn = document.getElementById('calcularAntiguedadBtn');
-
-    function fechaLocalISO(fecha = new Date()) {
-        const y = fecha.getFullYear();
-        const m = String(fecha.getMonth() + 1).padStart(2, '0');
-        const d = String(fecha.getDate()).padStart(2, '0');
-        return `${y}-${m}-${d}`;
-    }
-
-    function crearFechaLocal(valor) {
-        const [y, m, d] = valor.split('-').map(Number);
-        return new Date(y, m - 1, d, 12, 0, 0);
-    }
-
-    function sumarMesesSeguro(fecha, cantidad) {
-        const originalDia = fecha.getDate();
-        const resultado = new Date(fecha.getFullYear(), fecha.getMonth() + cantidad, 1, 12, 0, 0);
-        const ultimoDia = new Date(resultado.getFullYear(), resultado.getMonth() + 1, 0, 12, 0, 0).getDate();
-        resultado.setDate(Math.min(originalDia, ultimoDia));
-        return resultado;
-    }
-
-    function sumarAniosSeguro(fecha, cantidad) {
-        const originalDia = fecha.getDate();
-        const originalMes = fecha.getMonth();
-        const resultado = new Date(fecha.getFullYear() + cantidad, originalMes, 1, 12, 0, 0);
-        const ultimoDia = new Date(resultado.getFullYear(), originalMes + 1, 0, 12, 0, 0).getDate();
-        resultado.setDate(Math.min(originalDia, ultimoDia));
-        return resultado;
-    }
-
-    function diferenciaCalendario(desde, hasta) {
-        let anios = hasta.getFullYear() - desde.getFullYear();
-        let cursor = sumarAniosSeguro(desde, anios);
-
-        if (cursor > hasta) {
-            anios--;
-            cursor = sumarAniosSeguro(desde, anios);
+            const msDia = 24 * 60 * 60 * 1000;
+            const dias = Math.round((hasta - cursor) / msDia);
+            return {
+                anios,
+                meses,
+                dias
+            };
         }
 
-        let meses = 0;
-        while (meses < 11) {
-            const siguiente = sumarMesesSeguro(cursor, 1);
-            if (siguiente > hasta) break;
-            cursor = siguiente;
-            meses++;
-        }
+        fechaCalculoInput.value = fechaLocalISO();
 
-        const msDia = 24 * 60 * 60 * 1000;
-        const dias = Math.round((hasta - cursor) / msDia);
-        return { anios, meses, dias };
-    }
+        calcularAntiguedadBtn.addEventListener('click', () => {
+            if (!fechaIngresoInput.value) {
+                resultadoAntiguedad.innerHTML = '<span class="utility-error">Elegí la fecha de ingreso.</span>';
+                return;
+            }
 
-    fechaCalculoInput.value = fechaLocalISO();
+            const desde = crearFechaLocal(fechaIngresoInput.value);
+            const hasta = crearFechaLocal(fechaCalculoInput.value || fechaLocalISO());
 
-    calcularAntiguedadBtn.addEventListener('click', () => {
-        if (!fechaIngresoInput.value) {
-            resultadoAntiguedad.innerHTML = '<span class="utility-error">Elegí la fecha de ingreso.</span>';
-            return;
-        }
+            if (desde > hasta) {
+                resultadoAntiguedad.innerHTML = '<span class="utility-error">La fecha de ingreso no puede ser posterior a la fecha de cálculo.</span>';
+                return;
+            }
 
-        const desde = crearFechaLocal(fechaIngresoInput.value);
-        const hasta = crearFechaLocal(fechaCalculoInput.value || fechaLocalISO());
+            const {
+                anios,
+                meses,
+                dias
+            } = diferenciaCalendario(desde, hasta);
+            const partes = [
+                `${anios} ${anios === 1 ? 'año' : 'años'}`,
+                `${meses} ${meses === 1 ? 'mes' : 'meses'}`,
+                `${dias} ${dias === 1 ? 'día' : 'días'}`
+            ];
 
-        if (desde > hasta) {
-            resultadoAntiguedad.innerHTML = '<span class="utility-error">La fecha de ingreso no puede ser posterior a la fecha de cálculo.</span>';
-            return;
-        }
+            const proximoAniversario = sumarAniosSeguro(desde, anios + 1);
+            const diasAniversario = Math.max(0, Math.ceil((proximoAniversario - hasta) / (24 * 60 * 60 * 1000)));
 
-        const { anios, meses, dias } = diferenciaCalendario(desde, hasta);
-        const partes = [
-            `${anios} ${anios === 1 ? 'año' : 'años'}`,
-            `${meses} ${meses === 1 ? 'mes' : 'meses'}`,
-            `${dias} ${dias === 1 ? 'día' : 'días'}`
-        ];
-
-        const proximoAniversario = sumarAniosSeguro(desde, anios + 1);
-        const diasAniversario = Math.max(0, Math.ceil((proximoAniversario - hasta) / (24 * 60 * 60 * 1000)));
-
-        resultadoAntiguedad.innerHTML = `
+            resultadoAntiguedad.innerHTML = `
             <div class="result-big">${partes.join(', ')}</div>
             <div class="result-detail">Próximo aniversario laboral: <strong>${proximoAniversario.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })}</strong> · faltan ${diasAniversario} días.</div>
         `;
-    });
+        });
 
-    // ---- Próximo feriado argentino ----
-    const feriadoEstado = document.getElementById('feriadoEstado');
-    const feriadoResultado = document.getElementById('feriadoResultado');
+        // ---- Próximo feriado argentino ----
+        const feriadoEstado = document.getElementById('feriadoEstado');
+        const feriadoResultado = document.getElementById('feriadoResultado');
 
-    function fechaDesdeISO(valor) {
-        const [y, m, d] = valor.split('-').map(Number);
-        return new Date(y, m - 1, d, 12, 0, 0);
-    }
+        function fechaDesdeISO(valor) {
+            const [y, m, d] = valor.split('-').map(Number);
+            return new Date(y, m - 1, d, 12, 0, 0);
+        }
 
-    function diferenciaDias(desde, hasta) {
-        const a = new Date(desde.getFullYear(), desde.getMonth(), desde.getDate(), 12, 0, 0);
-        const b = new Date(hasta.getFullYear(), hasta.getMonth(), hasta.getDate(), 12, 0, 0);
-        return Math.round((b - a) / (24 * 60 * 60 * 1000));
-    }
+        function diferenciaDias(desde, hasta) {
+            const a = new Date(desde.getFullYear(), desde.getMonth(), desde.getDate(), 12, 0, 0);
+            const b = new Date(hasta.getFullYear(), hasta.getMonth(), hasta.getDate(), 12, 0, 0);
+            return Math.round((b - a) / (24 * 60 * 60 * 1000));
+        }
 
-    async function obtenerFeriados(anio) {
-        const response = await fetch(`https://api.argentinadatos.com/v1/feriados/${anio}`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.json();
-    }
+        async function obtenerFeriados(anio) {
+            const response = await fetch(`https://api.argentinadatos.com/v1/feriados/${anio}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        }
 
-    async function cargarProximoFeriado() {
-        const hoy = new Date();
-        const hoyBase = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 12, 0, 0);
+        async function cargarProximoFeriado() {
+            const hoy = new Date();
+            const hoyBase = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 12, 0, 0);
 
-        try {
-            let feriados = await obtenerFeriados(hoy.getFullYear());
-            let proximos = feriados
-                .map(f => ({ ...f, fechaObj: fechaDesdeISO(f.fecha) }))
-                .filter(f => f.fechaObj >= hoyBase)
-                .sort((a, b) => a.fechaObj - b.fechaObj);
+            try {
+                let feriados = await obtenerFeriados(hoy.getFullYear());
+                let proximos = feriados
+                    .map(f => ({...f,
+                        fechaObj: fechaDesdeISO(f.fecha)
+                    }))
+                    .filter(f => f.fechaObj >= hoyBase)
+                    .sort((a, b) => a.fechaObj - b.fechaObj);
 
-            if (proximos.length === 0) {
-                try {
-                    feriados = await obtenerFeriados(hoy.getFullYear() + 1);
-                    proximos = feriados
-                        .map(f => ({ ...f, fechaObj: fechaDesdeISO(f.fecha) }))
-                        .sort((a, b) => a.fechaObj - b.fechaObj);
-                } catch (e) {
-                    proximos = [];
+                if (proximos.length === 0) {
+                    try {
+                        feriados = await obtenerFeriados(hoy.getFullYear() + 1);
+                        proximos = feriados
+                            .map(f => ({...f,
+                                fechaObj: fechaDesdeISO(f.fecha)
+                            }))
+                            .sort((a, b) => a.fechaObj - b.fechaObj);
+                    } catch (e) {
+                        proximos = [];
+                    }
                 }
-            }
 
-            if (!proximos.length) throw new Error('No hay feriados futuros disponibles');
+                if (!proximos.length) throw new Error('No hay feriados futuros disponibles');
 
-            const proximo = proximos[0];
-            const dias = diferenciaDias(hoyBase, proximo.fechaObj);
-            const fechaTexto = proximo.fechaObj.toLocaleDateString('es-AR', {
-                weekday: 'long',
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            });
+                const proximo = proximos[0];
+                const dias = diferenciaDias(hoyBase, proximo.fechaObj);
+                const fechaTexto = proximo.fechaObj.toLocaleDateString('es-AR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
 
-            feriadoEstado.textContent = '';
-            feriadoResultado.innerHTML = `
+                feriadoEstado.textContent = '';
+                feriadoResultado.innerHTML = `
                 <div class="holiday-days">${dias === 0 ? '¡Es hoy!' : `Faltan ${dias} ${dias === 1 ? 'día' : 'días'}`}</div>
                 <div class="holiday-date">${fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1)}</div>
                 <div class="holiday-name">${proximo.nombre}</div>
@@ -866,309 +882,436 @@ html[data-theme="dark"] #hora-container .firma-jordan{
 
     cargarHoroscopo(signoHoroscopo.value);
     cargarTuDia(signoHoroscopo.value);
-</script>
+    </script>
 
 
-<script>
-    // Bloc de Notas: guardado local + descarga TXT
-    (() => {
-        const tituloNota = document.getElementById('tituloNota');
-        const textoNota = document.getElementById('textoNota');
-        const guardarNotaBtn = document.getElementById('guardarNotaBtn');
-        const descargarNotaBtn = document.getElementById('descargarNotaBtn');
-        const compartirNotaBtn = document.getElementById('compartirNotaBtn');
-        const limpiarNotaBtn = document.getElementById('limpiarNotaBtn');
-        const estadoNota = document.getElementById('estadoNota');
+    <script>
+        // Bloc de Notas: guardado local + descarga TXT
+        (() => {
+            const tituloNota = document.getElementById('tituloNota');
+            const textoNota = document.getElementById('textoNota');
+            const guardarNotaBtn = document.getElementById('guardarNotaBtn');
+            const descargarNotaBtn = document.getElementById('descargarNotaBtn');
+            const compartirNotaBtn = document.getElementById('compartirNotaBtn');
+            const limpiarNotaBtn = document.getElementById('limpiarNotaBtn');
+            const estadoNota = document.getElementById('estadoNota');
 
-        const CLAVE_TITULO = 'dashboardNotaTitulo';
-        const CLAVE_TEXTO = 'dashboardNotaTexto';
-        let temporizadorGuardado;
+            const CLAVE_TITULO = 'dashboardNotaTitulo';
+            const CLAVE_TEXTO = 'dashboardNotaTexto';
+            let temporizadorGuardado;
 
-        tituloNota.value = localStorage.getItem(CLAVE_TITULO) || '';
-        textoNota.value = localStorage.getItem(CLAVE_TEXTO) || '';
+            tituloNota.value = localStorage.getItem(CLAVE_TITULO) || '';
+            textoNota.value = localStorage.getItem(CLAVE_TEXTO) || '';
 
-        function horaActual() {
-            return new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-        }
-
-        function guardarNota(mostrarMensaje = true) {
-            localStorage.setItem(CLAVE_TITULO, tituloNota.value);
-            localStorage.setItem(CLAVE_TEXTO, textoNota.value);
-            if (mostrarMensaje) estadoNota.textContent = `Guardado en este navegador · ${horaActual()}`;
-        }
-
-        function programarAutoguardado() {
-            estadoNota.textContent = 'Guardando...';
-            clearTimeout(temporizadorGuardado);
-            temporizadorGuardado = setTimeout(() => guardarNota(true), 500);
-        }
-
-        tituloNota.addEventListener('input', programarAutoguardado);
-        textoNota.addEventListener('input', programarAutoguardado);
-        guardarNotaBtn.addEventListener('click', () => guardarNota(true));
-
-        descargarNotaBtn.addEventListener('click', () => {
-            guardarNota(false);
-            const titulo = tituloNota.value.trim();
-            const contenido = textoNota.value;
-
-            if (!contenido.trim()) {
-                estadoNota.textContent = 'No hay texto para descargar.';
-                return;
+            function horaActual() {
+                return new Date().toLocaleTimeString('es-AR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
             }
 
-            const encabezado = titulo ? `${titulo}\n${'='.repeat(Math.min(titulo.length, 60))}\n\n` : '';
-            const blob = new Blob([encabezado + contenido], { type: 'text/plain;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            const fecha = new Date().toISOString().slice(0, 10);
-            const nombreSeguro = (titulo || `nota-${fecha}`)
-                .replace(/[\\/:*?"<>|]+/g, '-')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            link.href = url;
-            link.download = `${nombreSeguro}.txt`;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            URL.revokeObjectURL(url);
-            estadoNota.textContent = `TXT descargado · ${horaActual()}`;
-        });
-
-        compartirNotaBtn.addEventListener('click', async () => {
-            guardarNota(false);
-
-            const titulo = tituloNota.value.trim() || 'Nota';
-            const contenido = textoNota.value;
-
-            if (!contenido.trim()) {
-                estadoNota.textContent = 'No hay texto para compartir.';
-                return;
+            function guardarNota(mostrarMensaje = true) {
+                localStorage.setItem(CLAVE_TITULO, tituloNota.value);
+                localStorage.setItem(CLAVE_TEXTO, textoNota.value);
+                if (mostrarMensaje) estadoNota.textContent = `Guardado en este navegador · ${horaActual()}`;
             }
 
-            const encabezado = tituloNota.value.trim()
-                ? `${titulo}\n${'='.repeat(Math.min(titulo.length, 60))}\n\n`
-                : '';
-            const textoCompleto = encabezado + contenido;
-            const fecha = new Date().toISOString().slice(0, 10);
-            const nombreSeguro = (tituloNota.value.trim() || `nota-${fecha}`)
-                .replace(/[\\/:*?"<>|]+/g, '-')
-                .replace(/\s+/g, ' ')
-                .trim();
-            const archivo = new File([textoCompleto], `${nombreSeguro}.txt`, {
-                type: 'text/plain;charset=utf-8'
+            function programarAutoguardado() {
+                estadoNota.textContent = 'Guardando...';
+                clearTimeout(temporizadorGuardado);
+                temporizadorGuardado = setTimeout(() => guardarNota(true), 500);
+            }
+
+            tituloNota.addEventListener('input', programarAutoguardado);
+            textoNota.addEventListener('input', programarAutoguardado);
+            guardarNotaBtn.addEventListener('click', () => guardarNota(true));
+
+            descargarNotaBtn.addEventListener('click', () => {
+                guardarNota(false);
+                const titulo = tituloNota.value.trim();
+                const contenido = textoNota.value;
+
+                if (!contenido.trim()) {
+                    estadoNota.textContent = 'No hay texto para descargar.';
+                    return;
+                }
+
+                const encabezado = titulo ? `${titulo}\n${'='.repeat(Math.min(titulo.length, 60))}\n\n` : '';
+                const blob = new Blob([encabezado + contenido], {
+                    type: 'text/plain;charset=utf-8'
+                });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                const fecha = new Date().toISOString().slice(0, 10);
+                const nombreSeguro = (titulo || `nota-${fecha}`)
+                    .replace(/[\\/:*?"<>|]+/g, '-')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+
+                link.href = url;
+                link.download = `${nombreSeguro}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+                estadoNota.textContent = `TXT descargado · ${horaActual()}`;
             });
 
-            try {
-                // Primera opción: compartir el TXT como archivo.
-                if (navigator.share && navigator.canShare &&
-                    navigator.canShare({ files: [archivo] })) {
-                    await navigator.share({
-                        title: titulo,
-                        text: titulo,
-                        files: [archivo]
-                    });
-                    estadoNota.textContent = `Nota compartida · ${horaActual()}`;
+            compartirNotaBtn.addEventListener('click', async() => {
+                guardarNota(false);
+
+                const titulo = tituloNota.value.trim() || 'Nota';
+                const contenido = textoNota.value;
+
+                if (!contenido.trim()) {
+                    estadoNota.textContent = 'No hay texto para compartir.';
                     return;
                 }
 
-                // Segunda opción: compartir directamente el texto.
-                if (navigator.share) {
-                    await navigator.share({
-                        title: titulo,
-                        text: textoCompleto
-                    });
-                    estadoNota.textContent = `Nota compartida · ${horaActual()}`;
-                    return;
-                }
-
-                // Respaldo para navegadores sin Web Share.
-                await navigator.clipboard.writeText(textoCompleto);
-                estadoNota.textContent = 'Tu navegador no permite compartir: nota copiada al portapapeles.';
-            } catch (error) {
-                // Cancelar el panel de compartir no es un error real.
-                if (error && error.name === 'AbortError') {
-                    estadoNota.textContent = 'Compartir cancelado.';
-                    return;
-                }
+                const encabezado = tituloNota.value.trim() ?
+                    `${titulo}\n${'='.repeat(Math.min(titulo.length, 60))}\n\n` :
+                    '';
+                const textoCompleto = encabezado + contenido;
+                const fecha = new Date().toISOString().slice(0, 10);
+                const nombreSeguro = (tituloNota.value.trim() || `nota-${fecha}`)
+                    .replace(/[\\/:*?"<>|]+/g, '-')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                const archivo = new File([textoCompleto], `${nombreSeguro}.txt`, {
+                    type: 'text/plain;charset=utf-8'
+                });
 
                 try {
+                    // Primera opción: compartir el TXT como archivo.
+                    if (navigator.share && navigator.canShare &&
+                        navigator.canShare({
+                            files: [archivo]
+                        })) {
+                        await navigator.share({
+                            title: titulo,
+                            text: titulo,
+                            files: [archivo]
+                        });
+                        estadoNota.textContent = `Nota compartida · ${horaActual()}`;
+                        return;
+                    }
+
+                    // Segunda opción: compartir directamente el texto.
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: titulo,
+                            text: textoCompleto
+                        });
+                        estadoNota.textContent = `Nota compartida · ${horaActual()}`;
+                        return;
+                    }
+
+                    // Respaldo para navegadores sin Web Share.
                     await navigator.clipboard.writeText(textoCompleto);
-                    estadoNota.textContent = 'No se pudo abrir Compartir: nota copiada al portapapeles.';
-                } catch {
-                    estadoNota.textContent = 'Este navegador no permite compartir directamente.';
+                    estadoNota.textContent = 'Tu navegador no permite compartir: nota copiada al portapapeles.';
+                } catch (error) {
+                    // Cancelar el panel de compartir no es un error real.
+                    if (error && error.name === 'AbortError') {
+                        estadoNota.textContent = 'Compartir cancelado.';
+                        return;
+                    }
+
+                    try {
+                        await navigator.clipboard.writeText(textoCompleto);
+                        estadoNota.textContent = 'No se pudo abrir Compartir: nota copiada al portapapeles.';
+                    } catch {
+                        estadoNota.textContent = 'Este navegador no permite compartir directamente.';
+                    }
                 }
+            });
+
+            limpiarNotaBtn.addEventListener('click', () => {
+                if (!tituloNota.value && !textoNota.value) return;
+                if (!confirm('¿Querés borrar la nota guardada?')) return;
+                tituloNota.value = '';
+                textoNota.value = '';
+                localStorage.removeItem(CLAVE_TITULO);
+                localStorage.removeItem(CLAVE_TEXTO);
+                estadoNota.textContent = 'Nota borrada.';
+                textoNota.focus();
+            });
+
+            if (tituloNota.value || textoNota.value) {
+                estadoNota.textContent = 'Nota recuperada de este navegador.';
             }
-        });
-
-        limpiarNotaBtn.addEventListener('click', () => {
-            if (!tituloNota.value && !textoNota.value) return;
-            if (!confirm('¿Querés borrar la nota guardada?')) return;
-            tituloNota.value = '';
-            textoNota.value = '';
-            localStorage.removeItem(CLAVE_TITULO);
-            localStorage.removeItem(CLAVE_TEXTO);
-            estadoNota.textContent = 'Nota borrada.';
-            textoNota.focus();
-        });
-
-        if (tituloNota.value || textoNota.value) {
-            estadoNota.textContent = 'Nota recuperada de este navegador.';
-        }
-    })();
-</script>
+        })();
+    </script>
 
 
-<script>
-    // ============================================================
-    // Modo día / noche
-    // - Respeta el tema de Windows la primera vez
-    // - Luego recuerda la elección del usuario en este navegador
-    // ============================================================
-    (function () {
-        const CLAVE_TEMA = 'mercante-tema';
-        const botonTema = document.getElementById('theme-toggle');
+    <script>
+        // ============================================================
+        // Modo día / noche
+        // - Respeta el tema de Windows la primera vez
+        // - Luego recuerda la elección del usuario en este navegador
+        // ============================================================
+        (function() {
+            const CLAVE_TEMA = 'mercante-tema';
+            const botonTema = document.getElementById('theme-toggle');
 
-        function temaActual() {
-            return document.documentElement.getAttribute('data-theme') || 'light';
-        }
+            function temaActual() {
+                return document.documentElement.getAttribute('data-theme') || 'light';
+            }
 
-        function actualizarBoton() {
-            const oscuro = temaActual() === 'dark';
-            botonTema.setAttribute('aria-pressed', oscuro ? 'true' : 'false');
-            botonTema.title = oscuro ? 'Cambiar a modo día' : 'Cambiar a modo noche';
-        }
+            function actualizarBoton() {
+                const oscuro = temaActual() === 'dark';
+                botonTema.setAttribute('aria-pressed', oscuro ? 'true' : 'false');
+                botonTema.title = oscuro ? 'Cambiar a modo día' : 'Cambiar a modo noche';
+            }
 
-        function aplicarTema(tema, guardar = true) {
-            document.documentElement.setAttribute('data-theme', tema);
-            if (guardar) localStorage.setItem(CLAVE_TEMA, tema);
+            function aplicarTema(tema, guardar = true) {
+                document.documentElement.setAttribute('data-theme', tema);
+                if (guardar) localStorage.setItem(CLAVE_TEMA, tema);
+                actualizarBoton();
+            }
+
+            botonTema.addEventListener('click', () => {
+                aplicarTema(temaActual() === 'dark' ? 'light' : 'dark');
+            });
+
             actualizarBoton();
-        }
-
-        botonTema.addEventListener('click', () => {
-            aplicarTema(temaActual() === 'dark' ? 'light' : 'dark');
-        });
-
-        actualizarBoton();
-    })();
-</script>
+        })();
+    </script>
 
 
-<script>
-(function () {
-    const { PDFDocument, StandardFonts, rgb } = PDFLib;
-    const status = (id, msg, type='') => {
-        const e=document.getElementById(id); e.textContent=msg; e.className='pdf-status '+type;
-    };
-    const download = (bytes,name) => {
-        const u=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
-        const a=document.createElement('a'); a.href=u; a.download=name; a.click();
-        setTimeout(()=>URL.revokeObjectURL(u),1500);
-    };
-    const safe = s => (s||'documento').trim().replace(/[<>:"/\\\\|?*\x00-\x1F]/g,'') || 'documento';
+    <script>
+        (function() {
+            const {
+                PDFDocument,
+                StandardFonts,
+                rgb
+            } = PDFLib;
+            const status = (id, msg, type = '') => {
+                const e = document.getElementById(id);
+                e.textContent = msg;
+                e.className = 'pdf-status ' + type;
+            };
+            const download = (bytes, name) => {
+                const u = URL.createObjectURL(new Blob([bytes], {
+                    type: 'application/pdf'
+                }));
+                const a = document.createElement('a');
+                a.href = u;
+                a.download = name;
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(u), 1500);
+            };
+            const safe = s => (s || 'documento').trim().replace(/[<>:"/\\\\|?*\x00-\x1F]/g, '') || 'documento';
 
-    document.querySelectorAll('.pdf-tab').forEach(b=>b.onclick=()=>{
-        document.querySelectorAll('.pdf-tab,.pdf-panel').forEach(x=>x.classList.remove('active'));
-        b.classList.add('active'); document.getElementById('pdf-'+b.dataset.pdfTab).classList.add('active');
-    });
+            document.querySelectorAll('.pdf-tab').forEach(b => b.onclick = () => {
+                document.querySelectorAll('.pdf-tab,.pdf-panel').forEach(x => x.classList.remove('active'));
+                b.classList.add('active');
+                document.getElementById('pdf-' + b.dataset.pdfTab).classList.add('active');
+            });
 
-    function listFiles(inputId,listId){
-        const i=document.getElementById(inputId), l=document.getElementById(listId);
-        i.onchange=()=>{l.innerHTML=''; [...i.files].forEach((f,n)=>{const d=document.createElement('div');d.textContent=`${n+1}. ${f.name}`;l.appendChild(d);});};
-    }
-    listFiles('pdfMergeFiles','pdfMergeList'); listFiles('pdfImageFiles','pdfImageList');
-
-    document.getElementById('pdfMergeBtn').onclick=async()=>{
-        const files=[...document.getElementById('pdfMergeFiles').files];
-        if(files.length<2) return status('pdfMergeStatus','Elegí al menos dos PDFs.','error');
-        try{
-            status('pdfMergeStatus','Uniendo archivos...');
-            const out=await PDFDocument.create();
-            for(const f of files){const src=await PDFDocument.load(await f.arrayBuffer()); const ps=await out.copyPages(src,src.getPageIndices()); ps.forEach(p=>out.addPage(p));}
-            download(await out.save(),'PDF_unidos.pdf'); status('pdfMergeStatus',`Listo: ${files.length} PDFs unidos.`,'ok');
-        }catch(e){console.error(e);status('pdfMergeStatus','No se pudieron unir. Verificá que los PDFs no estén protegidos.','error');}
-    };
-
-    function pages(text,total){
-        const out=[], seen=new Set();
-        for(const part of text.split(',').map(x=>x.trim()).filter(Boolean)){
-            let nums=[];
-            if(/^\d+$/.test(part)) nums=[+part];
-            else {const m=part.match(/^(\d+)\s*-\s*(\d+)$/); if(!m) throw 0; let a=+m[1],b=+m[2]; if(a>b)[a,b]=[b,a]; for(let n=a;n<=b;n++)nums.push(n);}
-            for(const n of nums){if(n<1||n>total)throw 0;if(!seen.has(n)){seen.add(n);out.push(n-1);}}
-        }
-        if(!out.length) throw 0; return out;
-    }
-
-    document.getElementById('pdfSplitBtn').onclick=async()=>{
-        const f=document.getElementById('pdfSplitFile').files[0], r=document.getElementById('pdfPages').value;
-        if(!f||!r.trim()) return status('pdfSplitStatus','Elegí un PDF e indicá las páginas.','error');
-        try{
-            const src=await PDFDocument.load(await f.arrayBuffer()), idx=pages(r,src.getPageCount()), out=await PDFDocument.create();
-            (await out.copyPages(src,idx)).forEach(p=>out.addPage(p));
-            download(await out.save(),safe(f.name.replace(/\.pdf$/i,'')+'_paginas')+'.pdf');
-            status('pdfSplitStatus',`Listo: ${idx.length} página(s) extraída(s).`,'ok');
-        }catch(e){status('pdfSplitStatus','Revisá el rango. Ejemplo: 1-3, 5, 8-10.','error');}
-    };
-
-    async function imageBytes(f){
-        if(f.type==='image/jpeg')return ['jpg',await f.arrayBuffer()];
-        if(f.type==='image/png')return ['png',await f.arrayBuffer()];
-        const url=await new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f);});
-        const im=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url;});
-        const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);
-        const blob=await new Promise(ok=>c.toBlob(ok,'image/png')); return ['png',await blob.arrayBuffer()];
-    }
-
-    document.getElementById('pdfImagesBtn').onclick=async()=>{
-        const fs=[...document.getElementById('pdfImageFiles').files];
-        if(!fs.length)return status('pdfImagesStatus','Elegí al menos una imagen.','error');
-        try{
-            status('pdfImagesStatus','Creando PDF...');
-            const pdf=await PDFDocument.create(), mode=document.getElementById('pdfImageSize').value, ori=document.getElementById('pdfImageOrientation').value;
-            for(const f of fs){
-                const [t,b]=await imageBytes(f), im=t==='jpg'?await pdf.embedJpg(b):await pdf.embedPng(b);
-                let pw,ph;
-                if(mode==='original'){pw=im.width;ph=im.height;if(ori==='portrait'&&pw>ph)[pw,ph]=[ph,pw];if(ori==='landscape'&&ph>pw)[pw,ph]=[ph,pw];}
-                else {const o=ori==='auto'?(im.width>im.height?'landscape':'portrait'):ori; [pw,ph]=o==='landscape'?[841.89,595.28]:[595.28,841.89];}
-                const p=pdf.addPage([pw,ph]), m=mode==='a4'?28:0, scale=Math.min((pw-2*m)/im.width,(ph-2*m)/im.height), w=im.width*scale,h=im.height*scale;
-                p.drawImage(im,{x:(pw-w)/2,y:(ph-h)/2,width:w,height:h});
+            function listFiles(inputId, listId) {
+                const i = document.getElementById(inputId),
+                    l = document.getElementById(listId);
+                i.onchange = () => {
+                    l.innerHTML = '';
+                    [...i.files].forEach((f, n) => {
+                        const d = document.createElement('div');
+                        d.textContent = `${n+1}. ${f.name}`;
+                        l.appendChild(d);
+                    });
+                };
             }
-            download(await pdf.save(),'imagenes.pdf');status('pdfImagesStatus',`Listo: ${fs.length} imagen(es) convertida(s).`,'ok');
-        }catch(e){console.error(e);status('pdfImagesStatus','No se pudo crear el PDF.','error');}
-    };
+            listFiles('pdfMergeFiles', 'pdfMergeList');
+            listFiles('pdfImageFiles', 'pdfImageList');
 
-    function wrap(text,font,size,max){
-        const lines=[];
-        for(const para of text.replace(/\r/g,'').split('\n')){
-            if(!para.trim()){lines.push('');continue;}
-            let line='';
-            for(const word of para.split(/\s+/)){
-                const test=line?line+' '+word:word;
-                if(font.widthOfTextAtSize(test,size)<=max) line=test;
-                else {if(line)lines.push(line); line=word;}
+            document.getElementById('pdfMergeBtn').onclick = async() => {
+                const files = [...document.getElementById('pdfMergeFiles').files];
+                if (files.length < 2) return status('pdfMergeStatus', 'Elegí al menos dos PDFs.', 'error');
+                try {
+                    status('pdfMergeStatus', 'Uniendo archivos...');
+                    const out = await PDFDocument.create();
+                    for (const f of files) {
+                        const src = await PDFDocument.load(await f.arrayBuffer());
+                        const ps = await out.copyPages(src, src.getPageIndices());
+                        ps.forEach(p => out.addPage(p));
+                    }
+                    download(await out.save(), 'PDF_unidos.pdf');
+                    status('pdfMergeStatus', `Listo: ${files.length} PDFs unidos.`, 'ok');
+                } catch (e) {
+                    console.error(e);
+                    status('pdfMergeStatus', 'No se pudieron unir. Verificá que los PDFs no estén protegidos.', 'error');
+                }
+            };
+
+            function pages(text, total) {
+                const out = [],
+                    seen = new Set();
+                for (const part of text.split(',').map(x => x.trim()).filter(Boolean)) {
+                    let nums = [];
+                    if (/^\d+$/.test(part)) nums = [+part];
+                    else {
+                        const m = part.match(/^(\d+)\s*-\s*(\d+)$/);
+                        if (!m) throw 0;
+                        let a = +m[1],
+                            b = +m[2];
+                        if (a > b)[a, b] = [b, a];
+                        for (let n = a; n <= b; n++) nums.push(n);
+                    }
+                    for (const n of nums) {
+                        if (n < 1 || n > total) throw 0;
+                        if (!seen.has(n)) {
+                            seen.add(n);
+                            out.push(n - 1);
+                        }
+                    }
+                }
+                if (!out.length) throw 0;
+                return out;
             }
-            if(line)lines.push(line);
-        }
-        return lines;
-    }
 
-    document.getElementById('pdfTextBtn').onclick=async()=>{
-        const title=document.getElementById('pdfTextTitle').value.trim(), text=document.getElementById('pdfTextContent').value, size=+document.getElementById('pdfTextSize').value;
-        if(!title&&!text.trim())return status('pdfTextStatus','Escribí un título o algún texto.','error');
-        try{
-            const pdf=await PDFDocument.create(), normal=await pdf.embedFont(StandardFonts.Helvetica), bold=await pdf.embedFont(StandardFonts.HelveticaBold);
-            const W=595.28,H=841.89,M=55,max=W-2*M; let p=pdf.addPage([W,H]),y=H-M;
-            const put=(line,font,sz)=>{if(y<M+sz){p=pdf.addPage([W,H]);y=H-M;}if(line)p.drawText(line,{x:M,y,size:sz,font,color:rgb(.18,.18,.2)});y-=sz*1.45;};
-            if(title){wrap(title,bold,20,max).forEach(x=>put(x,bold,20));y-=10;}
-            wrap(text,normal,size,max).forEach(x=>put(x,normal,size));
-            const name=safe(document.getElementById('pdfTextFilename').value||title||'documento');
-            download(await pdf.save(),name+'.pdf');status('pdfTextStatus','PDF creado y descargado.','ok');
-        }catch(e){console.error(e);status('pdfTextStatus','No se pudo crear. Probá quitar emojis o símbolos especiales del texto.','error');}
-    };
-})();
-</script>
+            document.getElementById('pdfSplitBtn').onclick = async() => {
+                const f = document.getElementById('pdfSplitFile').files[0],
+                    r = document.getElementById('pdfPages').value;
+                if (!f || !r.trim()) return status('pdfSplitStatus', 'Elegí un PDF e indicá las páginas.', 'error');
+                try {
+                    const src = await PDFDocument.load(await f.arrayBuffer()),
+                        idx = pages(r, src.getPageCount()),
+                        out = await PDFDocument.create();
+                    (await out.copyPages(src, idx)).forEach(p => out.addPage(p));
+                    download(await out.save(), safe(f.name.replace(/\.pdf$/i, '') + '_paginas') + '.pdf');
+                    status('pdfSplitStatus', `Listo: ${idx.length} página(s) extraída(s).`, 'ok');
+                } catch (e) {
+                    status('pdfSplitStatus', 'Revisá el rango. Ejemplo: 1-3, 5, 8-10.', 'error');
+                }
+            };
+
+            async function imageBytes(f) {
+                if (f.type === 'image/jpeg') return ['jpg', await f.arrayBuffer()];
+                if (f.type === 'image/png') return ['png', await f.arrayBuffer()];
+                const url = await new Promise((ok, no) => {
+                    const r = new FileReader();
+                    r.onload = () => ok(r.result);
+                    r.onerror = no;
+                    r.readAsDataURL(f);
+                });
+                const im = await new Promise((ok, no) => {
+                    const i = new Image();
+                    i.onload = () => ok(i);
+                    i.onerror = no;
+                    i.src = url;
+                });
+                const c = document.createElement('canvas');
+                c.width = im.naturalWidth;
+                c.height = im.naturalHeight;
+                c.getContext('2d').drawImage(im, 0, 0);
+                const blob = await new Promise(ok => c.toBlob(ok, 'image/png'));
+                return ['png', await blob.arrayBuffer()];
+            }
+
+            document.getElementById('pdfImagesBtn').onclick = async() => {
+                const fs = [...document.getElementById('pdfImageFiles').files];
+                if (!fs.length) return status('pdfImagesStatus', 'Elegí al menos una imagen.', 'error');
+                try {
+                    status('pdfImagesStatus', 'Creando PDF...');
+                    const pdf = await PDFDocument.create(),
+                        mode = document.getElementById('pdfImageSize').value,
+                        ori = document.getElementById('pdfImageOrientation').value;
+                    for (const f of fs) {
+                        const [t, b] = await imageBytes(f), im = t === 'jpg' ? await pdf.embedJpg(b) : await pdf.embedPng(b);
+                        let pw, ph;
+                        if (mode === 'original') {
+                            pw = im.width;
+                            ph = im.height;
+                            if (ori === 'portrait' && pw > ph)[pw, ph] = [ph, pw];
+                            if (ori === 'landscape' && ph > pw)[pw, ph] = [ph, pw];
+                        } else {
+                            const o = ori === 'auto' ? (im.width > im.height ? 'landscape' : 'portrait') : ori;
+                            [pw, ph] = o === 'landscape' ? [841.89, 595.28] : [595.28, 841.89];
+                        }
+                        const p = pdf.addPage([pw, ph]),
+                            m = mode === 'a4' ? 28 : 0,
+                            scale = Math.min((pw - 2 * m) / im.width, (ph - 2 * m) / im.height),
+                            w = im.width * scale,
+                            h = im.height * scale;
+                        p.drawImage(im, {
+                            x: (pw - w) / 2,
+                            y: (ph - h) / 2,
+                            width: w,
+                            height: h
+                        });
+                    }
+                    download(await pdf.save(), 'imagenes.pdf');
+                    status('pdfImagesStatus', `Listo: ${fs.length} imagen(es) convertida(s).`, 'ok');
+                } catch (e) {
+                    console.error(e);
+                    status('pdfImagesStatus', 'No se pudo crear el PDF.', 'error');
+                }
+            };
+
+            function wrap(text, font, size, max) {
+                const lines = [];
+                for (const para of text.replace(/\r/g, '').split('\n')) {
+                    if (!para.trim()) {
+                        lines.push('');
+                        continue;
+                    }
+                    let line = '';
+                    for (const word of para.split(/\s+/)) {
+                        const test = line ? line + ' ' + word : word;
+                        if (font.widthOfTextAtSize(test, size) <= max) line = test;
+                        else {
+                            if (line) lines.push(line);
+                            line = word;
+                        }
+                    }
+                    if (line) lines.push(line);
+                }
+                return lines;
+            }
+
+            document.getElementById('pdfTextBtn').onclick = async() => {
+                const title = document.getElementById('pdfTextTitle').value.trim(),
+                    text = document.getElementById('pdfTextContent').value,
+                    size = +document.getElementById('pdfTextSize').value;
+                if (!title && !text.trim()) return status('pdfTextStatus', 'Escribí un título o algún texto.', 'error');
+                try {
+                    const pdf = await PDFDocument.create(),
+                        normal = await pdf.embedFont(StandardFonts.Helvetica),
+                        bold = await pdf.embedFont(StandardFonts.HelveticaBold);
+                    const W = 595.28,
+                        H = 841.89,
+                        M = 55,
+                        max = W - 2 * M;
+                    let p = pdf.addPage([W, H]),
+                        y = H - M;
+                    const put = (line, font, sz) => {
+                        if (y < M + sz) {
+                            p = pdf.addPage([W, H]);
+                            y = H - M;
+                        }
+                        if (line) p.drawText(line, {
+                            x: M,
+                            y,
+                            size: sz,
+                            font,
+                            color: rgb(.18, .18, .2)
+                        });
+                        y -= sz * 1.45;
+                    };
+                    if (title) {
+                        wrap(title, bold, 20, max).forEach(x => put(x, bold, 20));
+                        y -= 10;
+                    }
+                    wrap(text, normal, size, max).forEach(x => put(x, normal, size));
+                    const name = safe(document.getElementById('pdfTextFilename').value || title || 'documento');
+                    download(await pdf.save(), name + '.pdf');
+                    status('pdfTextStatus', 'PDF creado y descargado.', 'ok');
+                } catch (e) {
+                    console.error(e);
+                    status('pdfTextStatus', 'No se pudo crear. Probá quitar emojis o símbolos especiales del texto.', 'error');
+                }
+            };
+        })();
+    </script>
 
 </body>
 

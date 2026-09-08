@@ -832,7 +832,7 @@ html[data-theme="dark"] {
 /* Botón de tema junto al reloj */
 #theme-toggle {
     position: absolute;
-    top: 138px;
+    top: 150px;
     right: 40px;
     z-index: 11;
     width: auto;
@@ -1145,3 +1145,52 @@ html[data-theme="dark"] .pdf-file-list div{background:#191d27;color:#dfe3ea}
 html[data-theme="dark"] .pdf-status.ok{color:#78d680}html[data-theme="dark"] .pdf-status.error{color:#ff8d8d}
 #seccion-pdf{scroll-margin-top:24px}
 @media(max-width:700px){.pdf-tabs{display:grid;grid-template-columns:1fr 1fr}.pdf-tabs .pdf-tab{width:100%}.pdf-options-row{grid-template-columns:1fr;gap:0}}
+
+/* Easter egg Fydito */
+.firma-gif {
+    position: absolute;
+
+    /* Fydito aparece hacia ABAJO */
+    right: 0;
+    top: calc(100% + 8px);
+
+    width: 125px;
+    height: auto;
+
+    border-radius: 8px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-6px) scale(.96);
+    transform-origin: top right;
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        visibility .18s ease;
+
+    pointer-events: none;
+    z-index: 9999;
+
+    filter: drop-shadow(0 5px 8px rgba(0,0,0,.30));
+}
+
+.firma-jordan:hover .firma-gif {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+/* FYDITO - por delante del selector día/noche */
+#hora-container {
+    z-index: 20;
+}
+
+#theme-toggle {
+    z-index: 11;
+}
+
+.firma-gif {
+    z-index: 9999;
+}
