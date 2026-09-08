@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Clima en Tiempo Real</title>
+    <title>Mi Escritorio de Herramientas</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icon.ico">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
@@ -12,8 +12,24 @@
 
 <body>
     <header>
-        <h1>Dashboard de Herramientas</h1>
         <img id="logo" src="logo.png" alt="logo hospital" title="Hospital Mercante">
+
+        <div class="header-centro">
+            <h1>Mi Escritorio de Herramientas</h1>
+
+            <nav class="accesos-rapidos" aria-label="Accesos rápidos a las herramientas">
+                <a href="#seccion-clima" title="Ir al clima"><span>🌤️</span><small>Clima</small></a>
+                <a href="#seccion-imagenes" title="Ir al convertidor de imágenes"><span>🖼️</span><small>Imágenes</small></a>
+                <a href="#seccion-links" title="Ir al acortador de links"><span>🔗</span><small>Links</small></a>
+                <a href="#seccion-qr" title="Ir al generador QR"><span>📱</span><small>QR</small></a>
+                <a href="#seccion-voz" title="Ir al convertidor de texto a voz"><span>🔊</span><small>Voz</small></a>
+                <a href="#seccion-revista" title="Ir a la revista del hospital"><span>📚</span><small>Revista</small></a>
+                <a href="#seccion-antiguedad" title="Ir al calculador de antigüedad"><span>📆</span><small>Antigüedad</small></a>
+                <a href="#seccion-feriado" title="Ir al próximo feriado"><span>🇦🇷</span><small>Feriado</small></a>
+                <a href="#seccion-horoscopo" title="Ir al horóscopo semanal"><span>🔮</span><small>Horóscopo</small></a>
+                <a href="#seccion-notas" title="Ir al bloc de notas"><span>📝</span><small>Notas</small></a>
+            </nav>
+        </div>
     </header>
     <div id="hora-container">
         <div id="hora">--:--:--</div>
@@ -21,7 +37,7 @@
 
 
     <div id="dashboard">
-        <h1>🌤️ Clima en José C. Paz</h1>
+        <h1 id="seccion-clima">🌤️ Clima en José C. Paz</h1>
         <div id="ciudad">Ciudad: --</div>
         <div id="clima">Temperatura: --°C</div>
         <div id="condicion">Condición: --</div>
@@ -45,7 +61,7 @@
 
     <!-- Sección de conversión de imágenes -->
     <div class="image-converter">
-        <h2>🖼️ Convertidor de Imágenes</h2>
+        <h2 id="seccion-imagenes">🖼️ Convertidor de Imágenes</h2>
         <label for="fileInput">Selecciona el archivo:</label>
         <input type="file" id="fileInput" accept="image/*">
 
@@ -62,7 +78,7 @@
 
     <!-- Acortador de Links -->
     <div class="link-shortener">
-        <h2>🔗 Acortador de Links</h2>
+        <h2 id="seccion-links">🔗 Acortador de Links</h2>
         <label for="linkInput">Introduce el enlace:</label>
         <input type="url" id="linkInput" placeholder="https://example.com" required>
         <button id="shortenBtn">Acortar Link</button>
@@ -72,7 +88,7 @@
 
     <!-- Generador de Código QR -->
     <form>
-        <h2>📱 Generador de Código QR</h2>
+        <h2 id="seccion-qr">📱 Generador de Código QR</h2>
         <label for="nombre">URL para el Código QR:</label>
         <input type="text" id="nombre" placeholder="Introduce la URL...">
 
@@ -84,7 +100,7 @@
 
     <!-- Convertidor de Texto a Voz -->
     <div class="voice-container">
-        <h2>🔊 Convertidor de Texto a Voz</h2>
+        <h2 id="seccion-voz">🔊 Convertidor de Texto a Voz</h2>
         <textarea id="text-input" rows="10" cols="50" placeholder="Escribe el texto aquí..."></textarea><br>
 
         <label for="voice-select">Selecciona una voz:</label>
@@ -94,7 +110,7 @@
         <button id="stop-btn">Detener</button>
     </div>
     <div id="dashboard" class="revistas-card">
-        <h2>📚 Revista del Hospital</h2>
+        <h2 id="seccion-revista">📚 Revista del Hospital</h2>
         <div class="revistas">
             <a href="https://heyzine.com/flip-book/4ed7e834f0.html" target="_blank">
                 <img src="revista1.jpg" alt="Revista 1">
@@ -114,7 +130,7 @@
 
     <!-- Calculador de Antigüedad -->
     <div class="utility-card antiguedad-card">
-        <h2>📆 Calculador de Antigüedad</h2>
+        <h2 id="seccion-antiguedad">📆 Calculador de Antigüedad</h2>
         <label for="fechaIngreso">Fecha de ingreso:</label>
         <input type="date" id="fechaIngreso">
 
@@ -127,7 +143,7 @@
 
     <!-- Próximo Feriado -->
     <div class="utility-card feriado-card">
-        <h2>🇦🇷 Próximo Feriado</h2>
+        <h2 id="seccion-feriado">🇦🇷 Próximo Feriado</h2>
         <div id="feriadoEstado" class="utility-muted">Buscando el próximo feriado...</div>
         <div id="feriadoResultado" class="holiday-result"></div>
         <a class="utility-source" href="https://www.argentina.gob.ar/feriados" target="_blank" rel="noopener noreferrer">Calendario oficial de feriados</a>
@@ -135,7 +151,7 @@
 
     <!-- Horóscopo semanal -->
     <div class="utility-card horoscopo-card">
-        <h2>🔮 Horóscopo Semanal</h2>
+        <h2 id="seccion-horoscopo">🔮 Horóscopo Semanal</h2>
         <label for="signoHoroscopo">Elegí tu signo:</label>
         <select id="signoHoroscopo">
             <option value="aries">♈ Aries</option>
@@ -166,7 +182,7 @@
 
     <!-- Bloc de notas -->
     <div class="utility-card notas-card">
-        <h2>📝 Bloc de Notas</h2>
+        <h2 id="seccion-notas">📝 Bloc de Notas</h2>
         <p class="utility-muted notas-ayuda">Escribí tranquilo: la nota queda guardada automáticamente en este navegador.</p>
 
         <label for="tituloNota">Título / nombre del archivo:</label>

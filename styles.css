@@ -656,3 +656,162 @@ form h2,
         gap: 8px;
     }
 }
+
+
+/* ============================================================
+   Cabecera "Mi Escritorio de Herramientas" + accesos rápidos
+   ============================================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+header {
+    min-height: 235px;
+    padding-top: 30px;
+    padding-bottom: 26px;
+}
+
+.header-centro {
+    width: min(760px, calc(100vw - 500px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.header-centro h1 {
+    margin: 0;
+    text-align: center;
+}
+
+.accesos-rapidos {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 7px;
+    flex-wrap: nowrap;
+}
+
+.accesos-rapidos a {
+    flex: 1 1 0;
+    min-width: 58px;
+    max-width: 78px;
+    height: 70px;
+    padding: 7px 4px 5px;
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    transition: transform 0.18s ease, background-color 0.18s ease,
+                box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.accesos-rapidos a:hover {
+    text-decoration: none;
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.19);
+    border-color: rgba(255, 255, 255, 0.34);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
+}
+
+.accesos-rapidos a:active {
+    transform: translateY(-1px);
+}
+
+.accesos-rapidos span {
+    display: block;
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+.accesos-rapidos small {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 0.69rem;
+    line-height: 1.1;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.96);
+}
+
+/* Al navegar, deja aire entre el borde superior y el título */
+#seccion-clima,
+#seccion-imagenes,
+#seccion-links,
+#seccion-qr,
+#seccion-voz,
+#seccion-revista,
+#seccion-antiguedad,
+#seccion-feriado,
+#seccion-horoscopo,
+#seccion-notas {
+    scroll-margin-top: 24px;
+}
+
+@media (max-width: 1180px) {
+    header {
+        padding-left: 190px;
+        padding-right: 190px;
+    }
+
+    .header-centro {
+        width: 100%;
+    }
+
+    .accesos-rapidos {
+        flex-wrap: wrap;
+        max-width: 600px;
+    }
+
+    .accesos-rapidos a {
+        flex: 0 0 64px;
+    }
+}
+
+@media (max-width: 700px) {
+    header {
+        padding-bottom: 24px;
+    }
+
+    .header-centro {
+        width: 100%;
+        gap: 16px;
+    }
+
+    .header-centro h1 {
+        font-size: 1.9rem;
+    }
+
+    .accesos-rapidos {
+        max-width: 100%;
+        gap: 6px;
+    }
+
+    .accesos-rapidos a {
+        flex: 0 0 calc(20% - 6px);
+        min-width: 52px;
+        max-width: none;
+        height: 62px;
+        padding: 6px 2px 4px;
+    }
+
+    .accesos-rapidos span {
+        font-size: 1.5rem;
+    }
+
+    .accesos-rapidos small {
+        font-size: 0.62rem;
+    }
+}
