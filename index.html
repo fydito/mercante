@@ -162,6 +162,26 @@
         <a id="horoscopoCredito" class="utility-source" href="https://sigastra.com/es/" target="_blank" rel="noopener noreferrer">Powered by Sigastra</a>
     </div>
 
+
+    <!-- Bloc de notas -->
+    <div class="utility-card notas-card">
+        <h2>📝 Bloc de Notas</h2>
+        <p class="utility-muted notas-ayuda">Escribí tranquilo: la nota queda guardada automáticamente en este navegador.</p>
+
+        <label for="tituloNota">Título / nombre del archivo:</label>
+        <input type="text" id="tituloNota" placeholder="Mi nota">
+
+        <label for="textoNota">Nota:</label>
+        <textarea id="textoNota" class="notas-textarea" placeholder="Escribí tu nota acá..."></textarea>
+
+        <div class="notas-acciones">
+            <button type="button" id="guardarNotaBtn">Guardar nota</button>
+            <button type="button" id="descargarNotaBtn">Descargar .TXT</button>
+            <button type="button" id="limpiarNotaBtn" class="notas-btn-secundario">Limpiar</button>
+        </div>
+        <div id="estadoNota" class="utility-muted notas-estado">Sin cambios.</div>
+    </div>
+
     <!-- <div class="audio-controls">
     <button id="rec-btn">Rec</button>
     <button id="stop-rec-btn" disabled>Terminar Grabación</button>
@@ -721,6 +741,90 @@
 
     cargarHoroscopo(signoHoroscopo.value);
     cargarTuDia(signoHoroscopo.value);
+</script>
+
+
+<script>
+    // Bloc de Notas: guardado local + descarga TXT
+    (() => {
+        const tituloNota = document.getElementById('tituloNota');
+        const textoNota = document.getElementById('textoNota');
+        const guardarNotaBtn = document.getElementById('guardarNotaBtn');
+        const descargarNotaBtn = document.getElementById('descargarNotaBtn');
+        const limpiarNotaBtn = document.getElementById('limpiarNotaBtn');
+        const estadoNota = document.getElementById('estadoNota');
+
+        const CLAVE_TITULO = 'dashboardNotaTitulo';
+        const CLAVE_TEXTO = 'dashboardNotaTexto';
+        let temporizadorGuardado;
+
+        tituloNota.value = localStorage.getItem(CLAVE_TITULO) || '';
+        textoNota.value = localStorage.getItem(CLAVE_TEXTO) || '';
+
+        function horaActual() {
+            return new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function guardarNota(mostrarMensaje = true) {
+            localStorage.setItem(CLAVE_TITULO, tituloNota.value);
+            localStorage.setItem(CLAVE_TEXTO, textoNota.value);
+            if (mostrarMensaje) estadoNota.textContent = `Guardado en este navegador · ${horaActual()}`;
+        }
+
+        function programarAutoguardado() {
+            estadoNota.textContent = 'Guardando...';
+            clearTimeout(temporizadorGuardado);
+            temporizadorGuardado = setTimeout(() => guardarNota(true), 500);
+        }
+
+        tituloNota.addEventListener('input', programarAutoguardado);
+        textoNota.addEventListener('input', programarAutoguardado);
+        guardarNotaBtn.addEventListener('click', () => guardarNota(true));
+
+        descargarNotaBtn.addEventListener('click', () => {
+            guardarNota(false);
+            const titulo = tituloNota.value.trim();
+            const contenido = textoNota.value;
+
+            if (!contenido.trim()) {
+                estadoNota.textContent = 'No hay texto para descargar.';
+                return;
+            }
+
+            const encabezado = titulo ? `${titulo}\n${'='.repeat(Math.min(titulo.length, 60))}\n\n` : '';
+            const blob = new Blob([encabezado + contenido], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            const fecha = new Date().toISOString().slice(0, 10);
+            const nombreSeguro = (titulo || `nota-${fecha}`)
+                .replace(/[\\/:*?"<>|]+/g, '-')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            link.href = url;
+            link.download = `${nombreSeguro}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+            estadoNota.textContent = `TXT descargado · ${horaActual()}`;
+        });
+
+        limpiarNotaBtn.addEventListener('click', () => {
+            if (!tituloNota.value && !textoNota.value) return;
+            if (!confirm('¿Querés borrar la nota guardada?')) return;
+            tituloNota.value = '';
+            textoNota.value = '';
+            localStorage.removeItem(CLAVE_TITULO);
+            localStorage.removeItem(CLAVE_TEXTO);
+            estadoNota.textContent = 'Nota borrada.';
+            textoNota.focus();
+        });
+
+        if (tituloNota.value || textoNota.value) {
+            estadoNota.textContent = 'Nota recuperada de este navegador.';
+        }
+    })();
 </script>
 
 </body>
