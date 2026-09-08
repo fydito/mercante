@@ -152,6 +152,13 @@
         </select>
         <div id="horoscopoEstado" class="utility-muted">Consultando las estrellas...</div>
         <div id="horoscopoResultado" class="horoscope-result"></div>
+
+        <div class="tu-dia-box">
+            <h3>✨ Tu día</h3>
+            <div id="tuDiaEstado" class="utility-muted">Buscando tus datos de hoy...</div>
+            <div id="tuDiaResultado" class="tu-dia-grid"></div>
+        </div>
+
         <a id="horoscopoCredito" class="utility-source" href="https://sigastra.com/es/" target="_blank" rel="noopener noreferrer">Powered by Sigastra</a>
     </div>
 
@@ -614,6 +621,53 @@
         signoHoroscopo.value = signoGuardado;
     }
 
+    // ---- Datos divertidos del día (Aztro) ----
+    const tuDiaEstado = document.getElementById('tuDiaEstado');
+    const tuDiaResultado = document.getElementById('tuDiaResultado');
+
+    const traduccionAnimo = {
+        happy: 'Feliz', energetic: 'Con energía', calm: 'Tranquilo', relaxed: 'Relajado',
+        creative: 'Creativo', romantic: 'Romántico', adventurous: 'Aventurero',
+        thoughtful: 'Reflexivo', focused: 'Enfocado', optimistic: 'Optimista',
+        emotional: 'Emocional', sensitive: 'Sensible', playful: 'Juguetón'
+    };
+
+    const traduccionColor = {
+        red: 'Rojo', blue: 'Azul', green: 'Verde', yellow: 'Amarillo', orange: 'Naranja',
+        purple: 'Violeta', pink: 'Rosa', white: 'Blanco', black: 'Negro', gold: 'Dorado',
+        silver: 'Plateado', brown: 'Marrón', grey: 'Gris', gray: 'Gris', maroon: 'Bordó',
+        turquoise: 'Turquesa', violet: 'Violeta', indigo: 'Índigo', peach: 'Durazno'
+    };
+
+    async function cargarTuDia(signo) {
+        tuDiaEstado.textContent = 'Buscando tus datos de hoy...';
+        tuDiaResultado.innerHTML = '';
+
+        try {
+            const response = await fetch(`https://aztro.sameerkumar.website/?sign=${encodeURIComponent(signo)}&day=today`, { method: 'POST' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+
+            const colorOriginal = (data.color || '').trim();
+            const color = traduccionColor[colorOriginal.toLowerCase()] || colorOriginal || '—';
+            const animoOriginal = (data.mood || '').trim();
+            const animo = traduccionAnimo[animoOriginal.toLowerCase()] || animoOriginal || '—';
+            const compatibilidad = nombresSignos[(data.compatibility || '').toLowerCase()] || data.compatibility || '—';
+
+            tuDiaEstado.textContent = '';
+            tuDiaResultado.innerHTML = `
+                <div class="tu-dia-item"><span>🎨 Color</span><strong>${color}</strong></div>
+                <div class="tu-dia-item"><span>🔢 Número</span><strong>${data.lucky_number || '—'}</strong></div>
+                <div class="tu-dia-item"><span>🕐 Hora</span><strong>${data.lucky_time || '—'}</strong></div>
+                <div class="tu-dia-item"><span>🙂 Ánimo</span><strong>${animo}</strong></div>
+                <div class="tu-dia-item"><span>❤️ Afinidad</span><strong>${compatibilidad}</strong></div>
+            `;
+        } catch (error) {
+            console.error('Error al obtener datos del día:', error);
+            tuDiaEstado.innerHTML = '<span class="utility-error">Hoy los astros se guardaron los números 😅.</span>';
+        }
+    }
+
     async function cargarHoroscopo(signo) {
         horoscopoEstado.textContent = 'Consultando las estrellas...';
         horoscopoResultado.innerHTML = '';
@@ -662,9 +716,11 @@
     signoHoroscopo.addEventListener('change', () => {
         localStorage.setItem('dashboardSigno', signoHoroscopo.value);
         cargarHoroscopo(signoHoroscopo.value);
+        cargarTuDia(signoHoroscopo.value);
     });
 
     cargarHoroscopo(signoHoroscopo.value);
+    cargarTuDia(signoHoroscopo.value);
 </script>
 
 </body>
