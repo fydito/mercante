@@ -368,3 +368,127 @@ a:hover {
         margin-right: 0;
     }
 }
+
+/* ============================================================
+   Nuevas utilidades: antigüedad, feriados y horóscopo
+   ============================================================ */
+.utility-card {
+    background-color: #fff;
+    padding: 36px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.10);
+    margin: 0;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.utility-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.13);
+}
+
+.utility-card h2 {
+    color: #4CAF50;
+    font-size: 2rem;
+    margin: 0 0 22px;
+}
+
+.utility-result,
+.holiday-result,
+.horoscope-result {
+    margin-top: 18px;
+}
+
+.utility-muted {
+    color: #777;
+    font-size: 1rem;
+    margin-top: 8px;
+}
+
+.utility-error {
+    color: #b3261e;
+    font-weight: 600;
+}
+
+.result-big {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #09185c;
+    margin-bottom: 10px;
+}
+
+.result-detail {
+    font-size: 1.03rem;
+    line-height: 1.45;
+}
+
+.holiday-days {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #6200ea;
+    margin-bottom: 10px;
+}
+
+.holiday-date {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #09185c;
+    margin-bottom: 8px;
+}
+
+.holiday-name {
+    font-size: 1.25rem;
+    line-height: 1.35;
+    margin-bottom: 14px;
+}
+
+.holiday-type {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eef7ee;
+    color: #2e7d32;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+}
+
+.horoscope-sign {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #6200ea;
+    margin-bottom: 6px;
+}
+
+.horoscope-period {
+    color: #777;
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+}
+
+.horoscope-result p {
+    font-size: 1.08rem;
+    line-height: 1.6;
+}
+
+.utility-source {
+    display: inline-block;
+    margin-top: 18px;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+    .utility-card {
+        margin: 20px 0;
+        padding: 24px;
+    }
+
+    .utility-card h2 {
+        font-size: 1.6rem;
+    }
+
+    .holiday-days {
+        font-size: 1.8rem;
+    }
+}
+

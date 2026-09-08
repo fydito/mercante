@@ -109,6 +109,52 @@
             </a>
         </div>
     </div>
+
+
+    <!-- Calculador de Antigüedad -->
+    <div class="utility-card antiguedad-card">
+        <h2>📆 Calculador de Antigüedad</h2>
+        <label for="fechaIngreso">Fecha de ingreso:</label>
+        <input type="date" id="fechaIngreso">
+
+        <label for="fechaCalculo">Calcular hasta:</label>
+        <input type="date" id="fechaCalculo">
+
+        <button type="button" id="calcularAntiguedadBtn">Calcular antigüedad</button>
+        <div id="resultadoAntiguedad" class="utility-result"></div>
+    </div>
+
+    <!-- Próximo Feriado -->
+    <div class="utility-card feriado-card">
+        <h2>🇦🇷 Próximo Feriado</h2>
+        <div id="feriadoEstado" class="utility-muted">Buscando el próximo feriado...</div>
+        <div id="feriadoResultado" class="holiday-result"></div>
+        <a class="utility-source" href="https://www.argentina.gob.ar/feriados" target="_blank" rel="noopener noreferrer">Calendario oficial de feriados</a>
+    </div>
+
+    <!-- Horóscopo semanal -->
+    <div class="utility-card horoscopo-card">
+        <h2>🔮 Horóscopo Semanal</h2>
+        <label for="signoHoroscopo">Elegí tu signo:</label>
+        <select id="signoHoroscopo">
+            <option value="aries">♈ Aries</option>
+            <option value="taurus">♉ Tauro</option>
+            <option value="gemini">♊ Géminis</option>
+            <option value="cancer">♋ Cáncer</option>
+            <option value="leo">♌ Leo</option>
+            <option value="virgo">♍ Virgo</option>
+            <option value="libra" selected>♎ Libra</option>
+            <option value="scorpio">♏ Escorpio</option>
+            <option value="sagittarius">♐ Sagitario</option>
+            <option value="capricorn">♑ Capricornio</option>
+            <option value="aquarius">♒ Acuario</option>
+            <option value="pisces">♓ Piscis</option>
+        </select>
+        <div id="horoscopoEstado" class="utility-muted">Consultando las estrellas...</div>
+        <div id="horoscopoResultado" class="horoscope-result"></div>
+        <a id="horoscopoCredito" class="utility-source" href="https://sigastra.com/es/" target="_blank" rel="noopener noreferrer">Powered by Sigastra</a>
+    </div>
+
     <!-- <div class="audio-controls">
     <button id="rec-btn">Rec</button>
     <button id="stop-rec-btn" disabled>Terminar Grabación</button>
@@ -380,6 +426,231 @@
     
 </script>
        
+
+
+<script>
+    // ============================================================
+    // Utilidades nuevas: antigüedad, próximo feriado y horóscopo
+    // ============================================================
+
+    // ---- Calculador de antigüedad ----
+    const fechaIngresoInput = document.getElementById('fechaIngreso');
+    const fechaCalculoInput = document.getElementById('fechaCalculo');
+    const resultadoAntiguedad = document.getElementById('resultadoAntiguedad');
+    const calcularAntiguedadBtn = document.getElementById('calcularAntiguedadBtn');
+
+    function fechaLocalISO(fecha = new Date()) {
+        const y = fecha.getFullYear();
+        const m = String(fecha.getMonth() + 1).padStart(2, '0');
+        const d = String(fecha.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    }
+
+    function crearFechaLocal(valor) {
+        const [y, m, d] = valor.split('-').map(Number);
+        return new Date(y, m - 1, d, 12, 0, 0);
+    }
+
+    function sumarMesesSeguro(fecha, cantidad) {
+        const originalDia = fecha.getDate();
+        const resultado = new Date(fecha.getFullYear(), fecha.getMonth() + cantidad, 1, 12, 0, 0);
+        const ultimoDia = new Date(resultado.getFullYear(), resultado.getMonth() + 1, 0, 12, 0, 0).getDate();
+        resultado.setDate(Math.min(originalDia, ultimoDia));
+        return resultado;
+    }
+
+    function sumarAniosSeguro(fecha, cantidad) {
+        const originalDia = fecha.getDate();
+        const originalMes = fecha.getMonth();
+        const resultado = new Date(fecha.getFullYear() + cantidad, originalMes, 1, 12, 0, 0);
+        const ultimoDia = new Date(resultado.getFullYear(), originalMes + 1, 0, 12, 0, 0).getDate();
+        resultado.setDate(Math.min(originalDia, ultimoDia));
+        return resultado;
+    }
+
+    function diferenciaCalendario(desde, hasta) {
+        let anios = hasta.getFullYear() - desde.getFullYear();
+        let cursor = sumarAniosSeguro(desde, anios);
+
+        if (cursor > hasta) {
+            anios--;
+            cursor = sumarAniosSeguro(desde, anios);
+        }
+
+        let meses = 0;
+        while (meses < 11) {
+            const siguiente = sumarMesesSeguro(cursor, 1);
+            if (siguiente > hasta) break;
+            cursor = siguiente;
+            meses++;
+        }
+
+        const msDia = 24 * 60 * 60 * 1000;
+        const dias = Math.round((hasta - cursor) / msDia);
+        return { anios, meses, dias };
+    }
+
+    fechaCalculoInput.value = fechaLocalISO();
+
+    calcularAntiguedadBtn.addEventListener('click', () => {
+        if (!fechaIngresoInput.value) {
+            resultadoAntiguedad.innerHTML = '<span class="utility-error">Elegí la fecha de ingreso.</span>';
+            return;
+        }
+
+        const desde = crearFechaLocal(fechaIngresoInput.value);
+        const hasta = crearFechaLocal(fechaCalculoInput.value || fechaLocalISO());
+
+        if (desde > hasta) {
+            resultadoAntiguedad.innerHTML = '<span class="utility-error">La fecha de ingreso no puede ser posterior a la fecha de cálculo.</span>';
+            return;
+        }
+
+        const { anios, meses, dias } = diferenciaCalendario(desde, hasta);
+        const partes = [
+            `${anios} ${anios === 1 ? 'año' : 'años'}`,
+            `${meses} ${meses === 1 ? 'mes' : 'meses'}`,
+            `${dias} ${dias === 1 ? 'día' : 'días'}`
+        ];
+
+        const proximoAniversario = sumarAniosSeguro(desde, anios + 1);
+        const diasAniversario = Math.max(0, Math.ceil((proximoAniversario - hasta) / (24 * 60 * 60 * 1000)));
+
+        resultadoAntiguedad.innerHTML = `
+            <div class="result-big">${partes.join(', ')}</div>
+            <div class="result-detail">Próximo aniversario laboral: <strong>${proximoAniversario.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })}</strong> · faltan ${diasAniversario} días.</div>
+        `;
+    });
+
+    // ---- Próximo feriado argentino ----
+    const feriadoEstado = document.getElementById('feriadoEstado');
+    const feriadoResultado = document.getElementById('feriadoResultado');
+
+    function fechaDesdeISO(valor) {
+        const [y, m, d] = valor.split('-').map(Number);
+        return new Date(y, m - 1, d, 12, 0, 0);
+    }
+
+    function diferenciaDias(desde, hasta) {
+        const a = new Date(desde.getFullYear(), desde.getMonth(), desde.getDate(), 12, 0, 0);
+        const b = new Date(hasta.getFullYear(), hasta.getMonth(), hasta.getDate(), 12, 0, 0);
+        return Math.round((b - a) / (24 * 60 * 60 * 1000));
+    }
+
+    async function obtenerFeriados(anio) {
+        const response = await fetch(`https://api.argentinadatos.com/v1/feriados/${anio}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+    }
+
+    async function cargarProximoFeriado() {
+        const hoy = new Date();
+        const hoyBase = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 12, 0, 0);
+
+        try {
+            let feriados = await obtenerFeriados(hoy.getFullYear());
+            let proximos = feriados
+                .map(f => ({ ...f, fechaObj: fechaDesdeISO(f.fecha) }))
+                .filter(f => f.fechaObj >= hoyBase)
+                .sort((a, b) => a.fechaObj - b.fechaObj);
+
+            if (proximos.length === 0) {
+                try {
+                    feriados = await obtenerFeriados(hoy.getFullYear() + 1);
+                    proximos = feriados
+                        .map(f => ({ ...f, fechaObj: fechaDesdeISO(f.fecha) }))
+                        .sort((a, b) => a.fechaObj - b.fechaObj);
+                } catch (e) {
+                    proximos = [];
+                }
+            }
+
+            if (!proximos.length) throw new Error('No hay feriados futuros disponibles');
+
+            const proximo = proximos[0];
+            const dias = diferenciaDias(hoyBase, proximo.fechaObj);
+            const fechaTexto = proximo.fechaObj.toLocaleDateString('es-AR', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            feriadoEstado.textContent = '';
+            feriadoResultado.innerHTML = `
+                <div class="holiday-days">${dias === 0 ? '¡Es hoy!' : `Faltan ${dias} ${dias === 1 ? 'día' : 'días'}`}</div>
+                <div class="holiday-date">${fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1)}</div>
+                <div class="holiday-name">${proximo.nombre}</div>
+                <span class="holiday-type">${proximo.tipo}</span>
+            `;
+        } catch (error) {
+            console.error('Error al obtener feriados:', error);
+            feriadoEstado.innerHTML = '<span class="utility-error">No se pudo consultar el calendario de feriados.</span>';
+            feriadoResultado.innerHTML = '';
+        }
+    }
+
+    cargarProximoFeriado();
+
+    // ---- Horóscopo semanal ----
+    const signoHoroscopo = document.getElementById('signoHoroscopo');
+    const horoscopoEstado = document.getElementById('horoscopoEstado');
+    const horoscopoResultado = document.getElementById('horoscopoResultado');
+    const horoscopoCredito = document.getElementById('horoscopoCredito');
+
+    const nombresSignos = {
+        aries: 'Aries', taurus: 'Tauro', gemini: 'Géminis', cancer: 'Cáncer',
+        leo: 'Leo', virgo: 'Virgo', libra: 'Libra', scorpio: 'Escorpio',
+        sagittarius: 'Sagitario', capricorn: 'Capricornio', aquarius: 'Acuario', pisces: 'Piscis'
+    };
+
+    const simbolosSignos = {
+        aries: '♈', taurus: '♉', gemini: '♊', cancer: '♋', leo: '♌', virgo: '♍',
+        libra: '♎', scorpio: '♏', sagittarius: '♐', capricorn: '♑', aquarius: '♒', pisces: '♓'
+    };
+
+    const signoGuardado = localStorage.getItem('dashboardSigno');
+    if (signoGuardado && nombresSignos[signoGuardado]) {
+        signoHoroscopo.value = signoGuardado;
+    }
+
+    async function cargarHoroscopo(signo) {
+        horoscopoEstado.textContent = 'Consultando las estrellas...';
+        horoscopoResultado.innerHTML = '';
+
+        try {
+            const response = await fetch(`https://sigastra.com/api/v1/weekly?lang=es&sign=${encodeURIComponent(signo)}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const data = await response.json();
+            const item = Array.isArray(data.items) ? data.items[0] : null;
+            if (!item || !item.text) throw new Error('Respuesta sin horóscopo');
+
+            horoscopoEstado.textContent = '';
+            horoscopoResultado.innerHTML = `
+                <div class="horoscope-sign">${simbolosSignos[signo]} ${nombresSignos[signo]}</div>
+                ${item.periodLabel ? `<div class="horoscope-period">${item.periodLabel}</div>` : ''}
+                <p>${item.text}</p>
+            `;
+
+            if (data.attribution) {
+                horoscopoCredito.textContent = data.attribution.text || 'Powered by Sigastra';
+                horoscopoCredito.href = data.attribution.localizedHref || 'https://sigastra.com/es/';
+            }
+        } catch (error) {
+            console.error('Error al obtener horóscopo:', error);
+            horoscopoEstado.innerHTML = '<span class="utility-error">Las estrellas no contestaron 😅. Probá nuevamente en un rato.</span>';
+        }
+    }
+
+    signoHoroscopo.addEventListener('change', () => {
+        localStorage.setItem('dashboardSigno', signoHoroscopo.value);
+        cargarHoroscopo(signoHoroscopo.value);
+    });
+
+    cargarHoroscopo(signoHoroscopo.value);
+</script>
+
 </body>
 
 
