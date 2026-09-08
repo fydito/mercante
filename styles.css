@@ -492,3 +492,31 @@ a:hover {
     }
 }
 
+
+/* Refuerzo visual para las tres herramientas nuevas */
+.antiguedad-card,
+.feriado-card,
+.horoscopo-card {
+    background: #ffffff !important;
+    padding: 36px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.10) !important;
+    margin: 0 !important;
+    width: 100% !important;
+    align-self: stretch;
+}
+
+.horoscopo-card {
+    grid-column: 1 / -1;
+}
+
+.horoscopo-result p {
+    font-size: 1.08rem;
+    line-height: 1.75;
+    max-width: none;
+    white-space: normal;
+}
+
+@media (max-width: 1050px) {
+    .horoscopo-card { grid-column: 1; }
+}

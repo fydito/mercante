@@ -619,7 +619,7 @@
         horoscopoResultado.innerHTML = '';
 
         try {
-            const response = await fetch(`https://sigastra.com/api/v1/weekly?lang=es&sign=${encodeURIComponent(signo)}`);
+            const response = await fetch(`https://sigastra.com/api/v1/weekly?lang=es&sign=${encodeURIComponent(signo)}&full=1`);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const data = await response.json();
@@ -636,6 +636,22 @@
             if (data.attribution) {
                 horoscopoCredito.textContent = data.attribution.text || 'Powered by Sigastra';
                 horoscopoCredito.href = data.attribution.localizedHref || 'https://sigastra.com/es/';
+
+                // Sigastra exige canonical al usar el texto completo (full=1).
+                // Tomamos la URL del canonical que devuelve la propia API.
+                if (data.attribution.canonicalTag) {
+                    const matchCanonical = data.attribution.canonicalTag.match(/href=["']([^"']+)["']/i);
+                    if (matchCanonical && matchCanonical[1]) {
+                        let canonical = document.querySelector('link[data-sigastra-canonical]');
+                        if (!canonical) {
+                            canonical = document.createElement('link');
+                            canonical.rel = 'canonical';
+                            canonical.setAttribute('data-sigastra-canonical', 'true');
+                            document.head.appendChild(canonical);
+                        }
+                        canonical.href = matchCanonical[1];
+                    }
+                }
             }
         } catch (error) {
             console.error('Error al obtener horóscopo:', error);
