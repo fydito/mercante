@@ -1051,3 +1051,72 @@ html[data-theme="dark"] .accesos-rapidos a:hover {
         transform: translateX(-50%);
     }
 }
+
+
+/* ============================================================
+   CORRECCIÓN MODO NOCHE - tarjetas nuevas
+   Estas reglas pisan los fondos blancos reforzados con !important
+   ============================================================ */
+
+html[data-theme="dark"] .antiguedad-card,
+html[data-theme="dark"] .feriado-card,
+html[data-theme="dark"] .horoscopo-card,
+html[data-theme="dark"] .notas-card {
+    background: #232733 !important;
+    color: #e8eaf0 !important;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.34) !important;
+}
+
+html[data-theme="dark"] .antiguedad-card p,
+html[data-theme="dark"] .feriado-card p,
+html[data-theme="dark"] .horoscopo-card p,
+html[data-theme="dark"] .notas-card p,
+html[data-theme="dark"] .antiguedad-card label,
+html[data-theme="dark"] .feriado-card label,
+html[data-theme="dark"] .horoscopo-card label,
+html[data-theme="dark"] .notas-card label {
+    color: #e8eaf0;
+}
+
+html[data-theme="dark"] .horoscope-sign,
+html[data-theme="dark"] .horoscope-period {
+    color: #f1f3f8;
+}
+
+html[data-theme="dark"] .tu-dia-box {
+    border-top-color: #3b4150;
+}
+
+html[data-theme="dark"] .tu-dia-item {
+    background: #191d27;
+    border-color: #3c4352;
+}
+
+html[data-theme="dark"] .tu-dia-item span {
+    color: #aeb5c2;
+}
+
+html[data-theme="dark"] .tu-dia-item strong {
+    color: #b998ff;
+}
+
+html[data-theme="dark"] .holiday-name,
+html[data-theme="dark"] .holiday-date,
+html[data-theme="dark"] .holiday-type,
+html[data-theme="dark"] .notas-ayuda {
+    color: #e8eaf0;
+}
+
+/* El chip del tipo de feriado mantiene contraste en modo oscuro */
+html[data-theme="dark"] .holiday-type {
+    background: #203629;
+    color: #83d98d;
+}
+
+/* Links en tarjetas oscuras */
+html[data-theme="dark"] .antiguedad-card a,
+html[data-theme="dark"] .feriado-card a,
+html[data-theme="dark"] .horoscopo-card a,
+html[data-theme="dark"] .notas-card a {
+    color: #b998ff;
+}
