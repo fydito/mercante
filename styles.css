@@ -59,8 +59,8 @@ header h1 {
     right: 40px;
     z-index: 10;
     display: inline-block;
-    background-color: white;
-    border: 4px solid #ff1744;
+    background-color: rgb(218, 230, 115);
+    border: 4px solid #41e210;
     border-radius: 12px;
     padding: 16px 20px;
     margin: 0;
