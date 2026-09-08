@@ -619,3 +619,40 @@ a:hover {
     .notas-textarea { min-height: 240px; }
     .notas-acciones { display: block; }
 }
+
+
+/* ============================================================
+   Identidad visual unificada: icono + título en todas las tarjetas
+   ============================================================ */
+#dashboard h1,
+#dashboard h2,
+.image-converter h2,
+.link-shortener h2,
+form h2,
+.voice-container h2,
+.utility-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.15;
+}
+
+.revistas-card h2 {
+    margin-bottom: 26px;
+}
+
+.revistas-card .revistas {
+    align-items: flex-start;
+}
+
+@media (max-width: 700px) {
+    #dashboard h1,
+    #dashboard h2,
+    .image-converter h2,
+    .link-shortener h2,
+    form h2,
+    .voice-container h2,
+    .utility-card h2 {
+        gap: 8px;
+    }
+}
