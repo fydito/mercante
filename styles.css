@@ -1,212 +1,270 @@
-/* Reset */
+/* Dashboard de Herramientas - Maquillaje visual
+   Mantiene intacto el HTML/JavaScript existente. */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* General */
 body {
-    background: #f4f7f6;
+    background-color: #f3f3f3;
     color: #333;
     font-size: 16px;
+    min-height: 100vh;
+
+    /* Convierte las secciones existentes en una grilla sin tocar el HTML */
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 30px;
+    padding: 0 40px 40px;
 }
 
 header {
-    background: #008080;
+    grid-column: 1 / -1;
+    background-color: #6200ea;
     color: white;
-    padding: 1rem;
+    min-height: 210px;
+    padding: 40px 240px 40px 240px;
+    margin: 0 -40px;
     text-align: center;
-}
-
-h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-}
-
-/* Hora Container */
-#hora-container {
+    position: relative;
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin: 2rem 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    line-height: 1.15;
+}
+
+#logo {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 170px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* El reloj sigue siendo hermano del header en el HTML actual,
+   pero visualmente queda integrado a la cabecera. */
+#hora-container {
+    position: absolute;
+    top: 42px;
+    right: 40px;
+    z-index: 10;
+    display: inline-block;
+    background-color: white;
+    border: 4px solid #ff1744;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 #hora {
     font-size: 3rem;
-    font-weight: bold;
-    background: #333;
-    color: #fff;
-    padding: 1rem 2rem;
-    border-radius: 10px;
+    line-height: 1;
+    font-weight: 700;
+    color: #ff1744;
+    background: transparent;
+    padding: 0;
 }
 
-/* Dashboard */
-#dashboard {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    max-width: 800px;
+/* Tarjetas: se aplican a las secciones que ya existen */
+#dashboard,
+.image-converter,
+.link-shortener,
+form,
+.voice-container {
+    background-color: #fff;
+    padding: 36px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.10);
+    margin: 0;
+    max-width: none;
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#dashboard:hover,
+.image-converter:hover,
+.link-shortener:hover,
+form:hover,
+.voice-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.13);
+}
+
+/* Títulos */
+#dashboard h1,
+#dashboard h2,
+.image-converter h2,
+.link-shortener h2,
+form h2,
+.voice-container h2,
+h2 {
+    color: #4CAF50;
+    font-size: 2rem;
+    margin: 0 0 22px;
 }
 
 #dashboard h1 {
-    color: #008080;
-    margin-bottom: 2rem;
+    font-size: 2rem;
 }
 
-#dashboard div {
-    margin-bottom: 1rem;
+/* Datos del clima */
+#dashboard > div:not(#datos-curiosos):not(.revistas) {
+    margin-bottom: 12px;
     font-size: 1.2rem;
 }
 
-/* Datos Curiosos */
 #datos-curiosos {
-    background: #e7f7f7;
-    padding: 1rem;
+    background: #f0f7f0;
+    padding: 18px;
     border-radius: 10px;
+    margin-top: 20px;
 }
 
-/* Image Converter */
-.image-converter {
-    background: #f9f9f9;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    max-width: 800px;
+#datos-curiosos .frase {
+    margin-bottom: 0;
 }
 
-.image-converter h2 {
-    color: #008080;
-    margin-bottom: 1rem;
+/* Campos */
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 14px 15px;
+    margin: 12px 0 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    font-size: 1.05rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.image-converter button {
-    background: #008080;
-    color: #fff;
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #6200ea;
+    box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.12);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 130px;
+}
+
+label {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+/* Botones */
+button,
+.image-converter button,
+.link-shortener button,
+form button,
+.voice-container button,
+.audio-controls button {
+    padding: 13px 24px;
+    background-color: #6200ea;
+    color: white;
     border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-right: 0.5rem;
+    margin: 8px 8px 8px 0;
+    font-size: 1.05rem;
+    transition: background-color 0.25s ease, transform 0.15s ease;
 }
 
-.image-converter button:hover {
-    background: #006666;
+button:hover,
+.image-converter button:hover,
+.link-shortener button:hover,
+form button:hover,
+.voice-container button:hover,
+.audio-controls button:hover {
+    background-color: #3700b3;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Links y resultados */
+a {
+    color: #6200ea;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#shortenedLink {
+    overflow-wrap: anywhere;
+}
+
+#downloadLink {
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+/* QR */
+#codigoQR {
+    margin-top: 20px;
+}
+
+#codigoQR img,
+#codigoQR canvas {
+    max-width: 100%;
 }
 
 /* Revistas */
-.revista {
-    background: #f9f9f9;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    max-width: 800px;
-}
-
-.revista h2 {
-    color: #008080;
-    margin-bottom: 1rem;
-}
-.revistas img {
-  width: 10%;     /* cada imagen ocupa aprox. un 30% del contenedor */
-  height: auto;
-}
-
-
-/* QR Code Generator */
-form {
-    background: #f9f9f9;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    max-width: 800px;
-}
-
-form h2 {
-    color: #008080;
-    margin-bottom: 1rem;
-}
-
-form button {
-    background: #008080;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 0.5rem;
-}
-
-form button:hover {
-    background: #006666;
-}
-
-/* Voice Container */
-.voice-container {
-    background: #f9f9f9;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    max-width: 800px;
-}
-
-.voice-container h2 {
-    color: #008080;
-    margin-bottom: 1rem;
-}
-
-.voice-container button {
-    background: #008080;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 0.5rem;
-}
-
-.voice-container button:hover {
-    background: #006666;
-}
-
-/* Estilos para el reproductor de audio */
-.audio-controls {
+.revistas {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: flex-start;
+    margin: 0 !important;
+}
+
+.revistas a {
+    display: block;
+    flex: 1 1 120px;
+    max-width: 160px;
+    margin: 0;
+}
+
+.revistas img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14);
+    transition: transform 0.2s ease;
+}
+
+.revistas img:hover {
+    transform: scale(1.03);
+}
+
+/* Reproductor de audio, por si vuelve a habilitarse */
+.audio-controls {
     background: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    max-width: 800px;
-}
-
-.audio-controls h1 {
-    color: #008080;
-    margin-bottom: 2rem;
-}
-
-.audio-controls button {
-    background: #008080;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 0.5rem;
-    transition: background 0.3s;
-}
-
-.audio-controls button:hover {
-    background: #006666;
+    padding: 36px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.10);
+    margin: 0;
+    width: 100%;
 }
 
 .audio-controls .button-group {
@@ -218,32 +276,95 @@ form button:hover {
     flex: 1;
 }
 
+/* Responsive */
+@media (max-width: 1050px) {
+    body {
+        grid-template-columns: 1fr;
+        padding: 0 24px 30px;
+    }
 
-/* Image Converter */
-.link-shortener {
-    background: #f9f9f9;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    max-width: 800px;
+    header {
+        grid-column: 1;
+        margin: 0 -24px;
+        padding: 30px 190px 30px 190px;
+    }
+
+    #logo {
+        left: 24px;
+        height: 130px;
+    }
+
+    #hora-container {
+        right: 24px;
+        top: 48px;
+        padding: 13px 15px;
+    }
+
+    #hora {
+        font-size: 2.2rem;
+    }
 }
 
-.link-shortener h2 {
-    color: #008080;
-    margin-bottom: 1rem;
-}
+@media (max-width: 700px) {
+    body {
+        display: block;
+        padding: 0 15px 25px;
+    }
 
-.link-shortener button {
-    background: #008080;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 0.5rem;
-}
+    header {
+        margin: 0 -15px 20px;
+        min-height: auto;
+        padding: 24px 15px 120px;
+        display: block;
+    }
 
-.link-shortener button:hover {
-    background: #006666;
+    header h1 {
+        font-size: 2rem;
+    }
+
+    #logo {
+        position: static;
+        transform: none;
+        display: block;
+        height: 110px;
+        margin: 0 auto 16px;
+    }
+
+    #hora-container {
+        position: absolute;
+        top: 155px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        white-space: nowrap;
+    }
+
+    #dashboard,
+    .image-converter,
+    .link-shortener,
+    form,
+    .voice-container,
+    .audio-controls {
+        margin: 20px 0;
+        padding: 24px;
+    }
+
+    #dashboard h1,
+    #dashboard h2,
+    .image-converter h2,
+    .link-shortener h2,
+    form h2,
+    .voice-container h2,
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    button,
+    .image-converter button,
+    .link-shortener button,
+    form button,
+    .voice-container button {
+        width: 100%;
+        margin-right: 0;
+    }
 }
