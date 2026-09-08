@@ -280,6 +280,7 @@
         <div class="notas-acciones">
             <button type="button" id="guardarNotaBtn">Guardar nota</button>
             <button type="button" id="descargarNotaBtn">Descargar .TXT</button>
+            <button type="button" id="compartirNotaBtn">📤 Compartir</button>
             <button type="button" id="limpiarNotaBtn" class="notas-btn-secundario">Limpiar</button>
         </div>
         <div id="estadoNota" class="utility-muted notas-estado">Sin cambios.</div>
@@ -854,6 +855,7 @@
         const textoNota = document.getElementById('textoNota');
         const guardarNotaBtn = document.getElementById('guardarNotaBtn');
         const descargarNotaBtn = document.getElementById('descargarNotaBtn');
+        const compartirNotaBtn = document.getElementById('compartirNotaBtn');
         const limpiarNotaBtn = document.getElementById('limpiarNotaBtn');
         const estadoNota = document.getElementById('estadoNota');
 
@@ -911,6 +913,72 @@
             link.remove();
             URL.revokeObjectURL(url);
             estadoNota.textContent = `TXT descargado · ${horaActual()}`;
+        });
+
+        compartirNotaBtn.addEventListener('click', async () => {
+            guardarNota(false);
+
+            const titulo = tituloNota.value.trim() || 'Nota';
+            const contenido = textoNota.value;
+
+            if (!contenido.trim()) {
+                estadoNota.textContent = 'No hay texto para compartir.';
+                return;
+            }
+
+            const encabezado = tituloNota.value.trim()
+                ? `${titulo}\n${'='.repeat(Math.min(titulo.length, 60))}\n\n`
+                : '';
+            const textoCompleto = encabezado + contenido;
+            const fecha = new Date().toISOString().slice(0, 10);
+            const nombreSeguro = (tituloNota.value.trim() || `nota-${fecha}`)
+                .replace(/[\\/:*?"<>|]+/g, '-')
+                .replace(/\s+/g, ' ')
+                .trim();
+            const archivo = new File([textoCompleto], `${nombreSeguro}.txt`, {
+                type: 'text/plain;charset=utf-8'
+            });
+
+            try {
+                // Primera opción: compartir el TXT como archivo.
+                if (navigator.share && navigator.canShare &&
+                    navigator.canShare({ files: [archivo] })) {
+                    await navigator.share({
+                        title: titulo,
+                        text: titulo,
+                        files: [archivo]
+                    });
+                    estadoNota.textContent = `Nota compartida · ${horaActual()}`;
+                    return;
+                }
+
+                // Segunda opción: compartir directamente el texto.
+                if (navigator.share) {
+                    await navigator.share({
+                        title: titulo,
+                        text: textoCompleto
+                    });
+                    estadoNota.textContent = `Nota compartida · ${horaActual()}`;
+                    return;
+                }
+
+                // Respaldo para navegadores sin Web Share.
+                await navigator.clipboard.writeText(textoCompleto);
+                estadoNota.textContent = 'Tu navegador no permite compartir: nota copiada al portapapeles.';
+            } catch (error) {
+                // Cancelar el panel de compartir no es un error real.
+                if (error && error.name === 'AbortError') {
+                    estadoNota.textContent = 'Compartir cancelado.';
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(textoCompleto);
+                    estadoNota.textContent = 'No se pudo abrir Compartir: nota copiada al portapapeles.';
+                } catch {
+                    estadoNota.textContent = 'Este navegador no permite compartir directamente.';
+                }
+            }
         });
 
         limpiarNotaBtn.addEventListener('click', () => {
