@@ -18,6 +18,26 @@
     <link rel="icon" href="icon.ico">
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<style>
+#hora-container .firma-jordan{
+    margin-top:4px;
+    text-align:center;
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:.35px;
+    color:rgba(255,255,255,.68);
+    white-space:nowrap;
+    user-select:none;
+}
+html:not([data-theme="dark"]) #hora-container .firma-jordan{
+    color:rgba(55,35,95,.62);
+}
+html[data-theme="dark"] #hora-container .firma-jordan{
+    color:rgba(215,205,255,.72);
+}
+</style>
+
 </head>
 
 <body>
@@ -44,6 +64,7 @@
     </header>
     <div id="hora-container">
         <div id="hora">--:--:--</div>
+        <div class="firma-jordan">Jordan Molinari</div>
     </div>
 
     <button id="theme-toggle" type="button" aria-label="Cambiar entre modo día y noche" title="Cambiar tema">
