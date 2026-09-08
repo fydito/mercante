@@ -379,26 +379,7 @@
     });
     
 </script>
-        // Crear llamada JSONP
-        const script = document.createElement('script');
-
-        script.src =
-            'https://v.gd/create.php?format=json' +
-            '&callback=recibirVGD' +
-            '&url=' + encodeURIComponent(linkInput);
-
-        script.onerror = function() {
-            resultDiv.textContent = 'Error al conectar con v.gd.';
-            script.remove();
-        };
-
-        script.onload = function() {
-            script.remove();
-        };
-
-        document.body.appendChild(script);
-    });
-</script>
+       
 </body>
 
 
